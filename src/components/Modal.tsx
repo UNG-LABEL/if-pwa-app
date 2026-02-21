@@ -2,7 +2,7 @@ type ModalProps = {
   isOpen: boolean;
   onClose: () => void;
   t: {
-    title: string;
+    headline: string;
     description: string;
     note: string;
     cta: string;
@@ -15,7 +15,7 @@ function Modal({ isOpen, onClose, t }: ModalProps) {
   return (
     <div className="modal-overlay">
       <div className="modal">
-        <h3>{t.title}</h3>
+        <h3>{t.headline}</h3>
 
         <p>{t.description}</p>
         <p className="modal-note">{t.note}</p>

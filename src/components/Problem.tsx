@@ -1,6 +1,6 @@
 type ProblemProps = {
   t: {
-    title: string;
+    headline: string;
     items: string[];
   };
 };
@@ -9,7 +9,7 @@ function Problem({ t }: ProblemProps) {
   return (
     <section className="section-light">
       <div className="container">
-        <h2>{t.title}</h2>
+        <h2>{t.headline}</h2>
 
         <ul className="problem-list">
           {t.items.map((item, index) => (

@@ -1,6 +1,6 @@
 type TrustProps = {
   t: {
-    title: string;
+    headline: string;
     points: string[];
   };
 };
@@ -9,7 +9,7 @@ function Trust({ t }: TrustProps) {
   return (
     <section className="section-light">
       <div className="container">
-        <h2>{t.title}</h2>
+        <h2>{t.headline}</h2>
 
         <ul className="trust-list">
           {t.points.map((point, index) => (

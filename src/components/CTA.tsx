@@ -1,6 +1,6 @@
 type CTAProps = {
   t: {
-    title: string;
+    headline: string;
     button: string;
   };
   onOpen: () => void;
@@ -10,7 +10,7 @@ function CTA({ t, onOpen }: CTAProps) {
   return (
     <section className="section-dark">
       <div className="container">
-        <h2>{t.title}</h2>
+        <h2>{t.headline}</h2>
 
         <button
           className="button-primary"
