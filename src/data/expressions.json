@@ -1,0 +1,16 @@
+[
+  {
+    "id": "greeting_1",
+    "language": "en",
+    "text": "Good morning",
+    "meaning": "おはよう",
+    "category": "greeting"
+  },
+  {
+    "id": "greeting_1_ja",
+    "language": "ja",
+    "text": "おはよう",
+    "meaning": "朝のあいさつ",
+    "category": "greeting"
+  }
+]

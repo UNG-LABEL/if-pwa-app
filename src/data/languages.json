@@ -1,0 +1,84 @@
+{
+  "ja": {
+    "hero": {
+      "title": "16時間が、あなたの集中力を目覚めさせる",
+      "subheadline": "新しい習慣でパフォーマンスを最大化",
+      "cta": "今すぐ始める"
+    },
+    "problem": {
+      "title": "こんな状態になっていませんか？",
+      "items": [
+        "集中力が続かない",
+        "疲れが抜けない",
+        "頭がぼんやりする"
+      ]
+    },
+    "benefits": {
+      "title": "インターミッテントファスティングで得られること",
+      "items": [
+        "集中力の向上",
+        "回復力アップ",
+        "思考のクリアさ"
+      ]
+    },
+    "trust": {
+     "title": "科学的にも支持される習慣",
+     "points": [
+       "オートファジー研究で注目される時間設計",
+       "多くのビジネスパーソンが実践",
+       "海外でも広く取り入れられている健康習慣"
+     ]
+    },
+    "cta": {
+      "title": "今すぐ新しい習慣を始めましょう",
+      "button": "スタートする"
+    },
+    "modal": {
+      "title": "16時間が、あなたの集中力を目覚めさせる",
+      "description": "インターミッテントファスティングは、食事をしない時間を意識的につくることで集中力・回復力・判断力を高める習慣です。",
+      "note": "ハードな断食ではありません。日常に無理なく取り入れられます。",
+      "cta": "詳しく知る"
+    }
+  },
+  "en": {
+    "hero": {
+      "title": "16 Hours Awakens Your Focus",
+      "subheadline": "Maximize performance with a new habit",
+      "cta": "Start Now"
+    },
+    "problem": {
+      "title": "Are you experiencing this?",
+      "items": [
+        "Difficulty focusing",
+        "Constant fatigue",
+        "Mental fog"
+      ]
+    },
+    "benefits": {
+      "title": "What You Gain with Intermittent Fasting",
+      "items": [
+        "Improved focus",
+        "Better recovery",
+        "Mental clarity"
+      ]
+    },
+    "trust": {
+     "title": "A Habit Backed by Science",
+     "points": [
+        "Time structure linked to autophagy research",
+        "Practiced by high-performing professionals",
+        "Widely adopted as a global health habit"
+      ]
+    },
+    "cta": {
+      "title": "Start Your New Habit Today",
+      "button": "Get Started"
+    },
+    "modal": {
+      "title": "16 Hours Awakens Your Focus",
+      "description": "Intermittent fasting is a habit of intentionally creating non-eating periods to enhance focus, recovery, and decision-making.",
+      "note": "This is not extreme fasting. It can be naturally integrated into daily life.",
+      "cta": "Learn More"
+    }
+  }
+}
