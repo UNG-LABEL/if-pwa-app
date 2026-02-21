@@ -6,6 +6,7 @@ import Benefits from "./components/Benefits";
 import CTA from "./components/CTA";
 import Modal from "./components/Modal";
 import Trust from "./components/Trust";
+
 import { IFTimer } from "./components/IFTimer";
 
 type LangKey = keyof typeof languages;
@@ -24,18 +25,17 @@ useEffect(() => {
   return (
     <div style={{ fontFamily: "sans-serif" }}>
       {/* 言語切替 */}
-      <div style={{ padding: "16px" }}>
-        <button onClick={() => setLang("ja")} disabled={lang === "ja"}>
-          JP
-        </button>
-        <button
-          onClick={() => setLang("en")}
-          disabled={lang === "en"}
-          style={{ marginLeft: "8px" }}
-        >
-          EN
-        </button>
-      </div>
+      <div className="lang-switch">
+  <button onClick={() => setLang("ja")} disabled={lang === "ja"}>
+    JP
+  </button>
+  <button
+    onClick={() => setLang("en")}
+    disabled={lang === "en"}
+  >
+    EN
+  </button>
+</div>
 
       <Hero
   t={t.hero}
@@ -56,6 +56,8 @@ useEffect(() => {
   onClose={() => setIsModalOpen(false)}
   t={t.modal}
 />
+
+
 
 <hr style={{ margin: "40px 0" }} />
 <IFTimer />

@@ -237,10 +237,24 @@ h1, h2, h3, p {
 button {
   padding: 0.8rem 1.5rem;
   font-size: 1rem;
-  width: 100%; /* スマホでは横幅いっぱい */
   max-width: 300px; /* PCでは上限を設定 */
   margin: 0 auto;
   display: block;
+}
+.cta button {
+  width: 100%;
+}
+.lang-switch {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 0;
+}
+
+.lang-switch button {
+  width: auto;
+  padding: 6px 14px;
+  font-size: 14px;
 }
 
 /* 日本語の長文対策 */
