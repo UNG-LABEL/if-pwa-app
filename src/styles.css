@@ -173,3 +173,82 @@ p {
   transform: translateY(-3px);
   box-shadow: 0 15px 40px rgba(0,0,0,0.15);
 }
+
+/* 全体コンテナ */
+.container {
+  display: flex;
+  flex-direction: column; /* デフォルトは縦並び */
+  gap: 1rem;
+  padding: 1rem;
+  max-width: 1200px; /* PC時の最大幅 */
+  margin: 0 auto;    /* 中央寄せ */
+}
+.hero, .problem, .benefits, .cta {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 画像は幅100%で縮小 */
+.hero img, .problem img, .benefits img {
+  max-width: 100%;
+  height: auto;
+}
+h1, h2, h3, p {
+  margin: 0;
+  padding: 0.2rem 0;
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 1.5rem;
+  }
+  h2 {
+    font-size: 1.2rem;
+  }
+  p {
+    font-size: 1rem;
+  }
+}
+
+@media (min-width: 769px) {
+  h1 {
+    font-size: 2.5rem;
+  }
+  h2 {
+    font-size: 2rem;
+  }
+  p {
+    font-size: 1.2rem;
+  }
+}
+
+.row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap; /* 幅が狭ければ折り返す */
+}
+
+@media (max-width: 768px) {
+  .row {
+    flex-direction: column;
+  }
+}
+
+button {
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  width: 100%; /* スマホでは横幅いっぱい */
+  max-width: 300px; /* PCでは上限を設定 */
+  margin: 0 auto;
+  display: block;
+}
+
+/* 日本語の長文対策 */
+h1, h2, h3, p, button {
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+body {
+  word-break: break-word;
+}
