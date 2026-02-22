@@ -78,9 +78,21 @@ export const IFTimer = () => {
         </h4>
       )}
 
-      <button onClick={start}>START FAST</button>
-      <button onClick={handleEnd}>END FAST</button>
-      <button onClick={reset}>RESET</button>
+      {/* ボタン制御 */}
+{status === "idle" && (
+  <button onClick={start}>START FAST</button>
+)}
+
+{status === "running" && (
+  <button onClick={handleEnd}>END FAST</button>
+)}
+
+{status === "completed" && (
+  <>
+    <button onClick={start}>START AGAIN</button>
+    <button onClick={reset}>RESET</button>
+  </>
+)}
 
       <hr style={{ margin: "20px 0" }} />
 
