@@ -56,5 +56,6 @@ export const useTimer = () => {
     reset,
     elapsed,
     status,
+    startTime,
   };
 };
