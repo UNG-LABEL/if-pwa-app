@@ -104,9 +104,23 @@ export const IFTimer = () => {
         .slice()
         .reverse()
         .map((entry) => (
-          <div key={entry.id} style={{ marginBottom: "8px" }}>
-            {entry.date} — {formatTime(entry.duration)}
-          </div>
+          <div key={entry.id} style={{ marginBottom: "12px" }}>
+  <div><strong>{entry.date}</strong></div>
+
+  <div>
+    {new Date(entry.startTime).toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    })}{" "}
+    →{" "}
+    {new Date(entry.endTime).toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    })}
+  </div>
+
+  <div>{formatTime(entry.duration)}</div>
+</div>
         ))}
     </div>
   );
