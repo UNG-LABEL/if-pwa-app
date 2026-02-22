@@ -11,6 +11,8 @@ export const IFTimer = () => {
 
   const [lastDuration, setLastDuration] = useState<number | null>(null);
 
+  const [visibleCount, setVisibleCount] = useState(20);
+
   const formatTime = (ms: number) => {
     const h = Math.floor(ms / 3600000);
     const m = Math.floor((ms % 3600000) / 60000);
@@ -101,27 +103,62 @@ export const IFTimer = () => {
       {history.length === 0 && <p>まだ記録がありません</p>}
 
       {history
-        .slice()
-        .reverse()
-        .map((entry) => (
-          <div key={entry.id} style={{ marginBottom: "12px" }}>
-  <div><strong>{entry.date}</strong></div>
+  .slice()
+  .reverse()
+  .slice(0, visibleCount)
+  .map((entry) => (
+    <div
+      key={entry.id}
+      style={{
+        background: "#111",
+        color: "#fff",
+        padding: "14px 16px",
+        borderRadius: "12px",
+        marginBottom: "12px",
+        boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+      }}
+    >
+      {/* 1行目 */}
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <span>
+          {entry.date}{" "}
+          {new Date(entry.startTime).toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
+          {" → "}
+          {new Date(entry.endTime).toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
+        </span>
+      </div>
 
-  <div>
-    {new Date(entry.startTime).toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-    })}{" "}
-    →{" "}
-    {new Date(entry.endTime).toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-    })}
-  </div>
+      {/* 2行目 */}
+      <div
+        style={{
+          marginTop: "6px",
+          fontWeight: "bold",
+          color:
+            entry.duration >= TARGET
+              ? "#ff6b00"
+              : "#ccc",
+        }}
+      >
+        {entry.duration >= TARGET && "🔥 "}
+        {formatTime(entry.duration)}
+      </div>
+    </div>
+))}
 
-  <div>{formatTime(entry.duration)}</div>
-</div>
-        ))}
+{visibleCount < history.length && (
+  <button
+    onClick={() => setVisibleCount((prev) => prev + 20)}
+  >
+    もっと見る
+  </button>
+)}
+
     </div>
   );
 };
