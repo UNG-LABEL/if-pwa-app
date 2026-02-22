@@ -56,10 +56,15 @@ export const IFTimer = ({ lang }: { lang: "ja" | "en" }) => {
 
 
   const formatTime = (ms: number) => {
-    const h = Math.floor(ms / 3600000);
-    const m = Math.floor((ms % 3600000) / 60000);
+  const h = Math.floor(ms / 3600000);
+  const m = Math.floor((ms % 3600000) / 60000);
+
+  if (lang === "ja") {
     return `${h}時間${m}分`;
-  };
+  } else {
+    return `${h}h ${m}m`;
+  }
+};
 
   const handleEnd = () => {
     const result = stop();
@@ -117,7 +122,7 @@ export const IFTimer = ({ lang }: { lang: "ja" | "en" }) => {
 
           {elapsed >= TARGET && (
             <h3 style={{ color: "green" }}>
-              🎉 16時間達成！
+             {TEXT[lang].achieved}
             </h3>
           )}
         </>
@@ -125,9 +130,9 @@ export const IFTimer = ({ lang }: { lang: "ja" | "en" }) => {
 
       {/* 今回の結果 */}
       {lastDuration !== null && (
-        <h4>
-          今回の断食時間: {formatTime(lastDuration)}
-        </h4>
+      <h4>
+       {TEXT[lang].thisFast}: {formatTime(lastDuration)}
+      </h4>
       )}
 
       {/* ボタン制御 */}
