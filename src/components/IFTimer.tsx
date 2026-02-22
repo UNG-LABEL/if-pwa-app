@@ -4,6 +4,7 @@ import { useState } from "react";
 
 const TEXT = {
   ja: {
+    timerTitle: "IF IGNITE SESSION",
     streak: "連続日数",
     days: "日",
     average: "平均断食時間",
@@ -23,6 +24,7 @@ const TEXT = {
     loadMore: "もっと見る",
   },
   en: {
+    timerTitle: "Ignite",
     streak: "Streak",
     days: "days",
     average: "Average Fast",
@@ -80,6 +82,8 @@ export const IFTimer = ({ lang }: { lang: "ja" | "en" }) => {
       <div style={{ marginBottom: "10px" }}>
       
      </div>
+      <h2>{TEXT[lang].timerTitle}</h2>
+
 
       <h3>
       {TEXT[lang].streak}: {streak}
