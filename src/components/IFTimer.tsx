@@ -106,21 +106,21 @@ export const IFTimer = ({ lang }: { lang: "ja" | "en" }) => {
           <p>{TEXT[lang].elapsed} {formatTime(elapsed)}</p>
 
           {startTime && (
-            <>
-              <p>
-                Started:{" "}
-                {new Date(startTime).toLocaleTimeString([], {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}
-              </p>
-              <p>
-                Ends:{" "}
-                {new Date(startTime + TARGET).toLocaleTimeString([], {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}
-              </p>
+           <>
+            <p>
+              {TEXT[lang].started}:{" "}
+              {new Date(startTime).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+             </p>
+             <p>
+              {TEXT[lang].ends}:{" "}
+              {new Date(startTime + TARGET).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </p>
             </>
           )}
 
