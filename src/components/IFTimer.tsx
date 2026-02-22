@@ -2,7 +2,48 @@ import { useTimer } from "../hooks/useTimer";
 import { useIFStats } from "../hooks/useIFStats";
 import { useState } from "react";
 
-export const IFTimer = () => {
+const TEXT = {
+  ja: {
+    streak: "連続日数",
+    days: "日",
+    average: "平均断食時間",
+    fastMode: "FAST MODE",
+    remaining: "残り",
+    elapsed: "経過",
+    started: "開始",
+    ends: "終了予定",
+    achieved: "🎉 16時間達成！",
+    thisFast: "今回の断食時間",
+    startFast: "START FAST",
+    endFast: "END FAST",
+    startAgain: "START AGAIN",
+    reset: "RESET",
+    history: "履歴",
+    noHistory: "まだ記録がありません",
+    loadMore: "もっと見る",
+  },
+  en: {
+    streak: "Streak",
+    days: "days",
+    average: "Average Fast",
+    fastMode: "FAST MODE",
+    remaining: "Remaining",
+    elapsed: "Elapsed",
+    started: "Started",
+    ends: "Ends",
+    achieved: "🎉 16 Hours Achieved!",
+    thisFast: "This Fast",
+    startFast: "START FAST",
+    endFast: "END FAST",
+    startAgain: "START AGAIN",
+    reset: "RESET",
+    history: "History",
+    noHistory: "No records yet",
+    loadMore: "Load More",
+  },
+};
+
+export const IFTimer = ({ lang }: { lang: "ja" | "en" }) => {
   const { start, stop, reset, elapsed, status, startTime } = useTimer();
   const { streak, history, averageDuration, completeFast } = useIFStats();
 
@@ -12,6 +53,7 @@ export const IFTimer = () => {
   const [lastDuration, setLastDuration] = useState<number | null>(null);
 
   const [visibleCount, setVisibleCount] = useState(20);
+
 
   const formatTime = (ms: number) => {
     const h = Math.floor(ms / 3600000);
@@ -29,22 +71,30 @@ export const IFTimer = () => {
 
   return (
     <div>
-      <h3>連続日数: {streak}日</h3>
+
+      <div style={{ marginBottom: "10px" }}>
+      
+     </div>
+
+      <h3>
+      {TEXT[lang].streak}: {streak}
+      {lang === "ja" ? TEXT[lang].days : ` ${TEXT[lang].days}`}
+      </h3>
 
       {/* 平均表示 */}
-      {averageDuration > 0 && (
+      {averageDuration > 0 && ( 
         <h4>
-          平均断食時間: {formatTime(averageDuration)}
-        </h4>
+      {TEXT[lang].average}: {formatTime(averageDuration)}
+      </h4>
       )}
 
       {/* FAST中UI */}
       {status === "running" && (
         <>
-          <h2>FAST MODE</h2>
+          <h2>{TEXT[lang].fastMode}</h2>
 
-          <p>残り {formatTime(remaining)}</p>
-          <p>経過 {formatTime(elapsed)}</p>
+          <p>{TEXT[lang].remaining} {formatTime(remaining)}</p>
+          <p>{TEXT[lang].elapsed} {formatTime(elapsed)}</p>
 
           {startTime && (
             <>
@@ -94,13 +144,15 @@ export const IFTimer = () => {
     <button onClick={start}>START AGAIN</button>
     <button onClick={reset}>RESET</button>
   </>
-)}
+      )}
 
       <hr style={{ margin: "20px 0" }} />
 
-      <h4>履歴</h4>
+      <h4>{TEXT[lang].history}</h4>
 
-      {history.length === 0 && <p>まだ記録がありません</p>}
+      {history.length === 0 && (
+        <p>{TEXT[lang].noHistory}</p>
+      )}
 
       {history
   .slice()
@@ -155,7 +207,7 @@ export const IFTimer = () => {
   <button
     onClick={() => setVisibleCount((prev) => prev + 20)}
   >
-    もっと見る
+    {TEXT[lang].loadMore}
   </button>
 )}
 

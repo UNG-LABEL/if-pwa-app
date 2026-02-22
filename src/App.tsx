@@ -60,7 +60,7 @@ useEffect(() => {
 
 
 <hr style={{ margin: "40px 0" }} />
-<IFTimer />
+<IFTimer lang={lang} />
 
 
     </div>
