@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { IFHistoryEntry } from "../types/timer";
+import type { IFHistoryEntry } from "../types/timer";
 import { calculateStreakFromHistory } from "../utils/streak";
 
 const HISTORY_KEY = "if-history";
@@ -19,43 +19,34 @@ export const useIFStats = () => {
   }, []);
 
   const completeFast = (timerResult?: {
-    startTime: number;
-    endTime: number;
-    duration: number;
-  }) => {
-    if (!timerResult) return;
+  startTime: number;
+  endTime: number;
+  duration: number;
+}) => {
+  if (!timerResult) return;
 
-    const { startTime, endTime, duration } = timerResult;
+  const { startTime, endTime, duration } = timerResult;
 
-    const today = new Date().toISOString().split("T")[0];
+  const date = new Date(startTime).toISOString().split("T")[0];
 
-    // 🔥 同日重複防止
-    const alreadyCompleted = history.some(
-      (entry) => entry.date === today && entry.completed
-    );
-
-    if (alreadyCompleted) {
-      console.log("今日はすでに完了しています");
-      return;
-    }
-
-    const newEntry: IFHistoryEntry = {
-      date: today,
-      startTime,
-      endTime,
-      duration,
-      completed: true,
-    };
-
-    const updatedHistory = [...history, newEntry];
-
-    setHistory(updatedHistory);
-
-    const newStreak = calculateStreakFromHistory(updatedHistory);
-    setStreak(newStreak);
-
-    localStorage.setItem(HISTORY_KEY, JSON.stringify(updatedHistory));
+  const newEntry: IFHistoryEntry = {
+    id: startTime, // 🔥 一意キー追加
+    date,
+    startTime,
+    endTime,
+    duration,
+    completed: true,
   };
+
+  const updatedHistory = [...history, newEntry];
+
+  setHistory(updatedHistory);
+
+  const newStreak = calculateStreakFromHistory(updatedHistory);
+  setStreak(newStreak);
+
+  localStorage.setItem(HISTORY_KEY, JSON.stringify(updatedHistory));
+};
 
   const averageDuration =
   history.length === 0

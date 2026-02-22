@@ -104,7 +104,7 @@ export const IFTimer = () => {
         .slice()
         .reverse()
         .map((entry) => (
-          <div key={entry.date} style={{ marginBottom: "8px" }}>
+          <div key={entry.id} style={{ marginBottom: "8px" }}>
             {entry.date} — {formatTime(entry.duration)}
           </div>
         ))}

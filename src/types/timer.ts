@@ -13,6 +13,7 @@ export interface TimerState {
 }
 
 export interface IFHistoryEntry {
+  id: number;
   date: string;
   startTime: number;
   endTime: number;
