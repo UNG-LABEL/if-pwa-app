@@ -1,6 +1,10 @@
 import { useTimer } from "../hooks/useTimer";
 import { useIFStats } from "../hooks/useIFStats";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+
+const TARGET_HOURS = 16;      // あなたの目標時間
+
 
 const TEXT = {
   ja: {
@@ -46,13 +50,58 @@ const TEXT = {
 };
 
 export const IFTimer = ({ lang }: { lang: "ja" | "en" }) => {
-  const { start, stop, reset, elapsed, status, startTime } = useTimer();
+  const MAX_FAST_HOURS = 24; // 仮（後でSettingsと連携）// Auto Stop 上限
+
+  const { start, stop, reset, elapsed, status, startTime } =
+    useTimer();
+
   const { streak, history, averageDuration, completeFast } = useIFStats();
+
+  const [autoStopTriggered, setAutoStopTriggered] = useState(false);
+
+
+  
+    useEffect(() => {
+  // running中でなければ何もしない
+  if (status !== "running") return;
+
+  // すでにAutoStop発動済みなら何もしない（🔥 二重防止）
+  if (autoStopTriggered) return;
+
+  const maxDuration = MAX_FAST_HOURS * 60 * 60 * 1000;
+
+  if (elapsed >= maxDuration) {
+    // 🔥 ここで即ロック（これが最重要）
+    setAutoStopTriggered(true);
+
+    const result = stop();
+    if (!result) return;
+
+    const { startTime, endTime, duration } = result;
+
+    const achieved =
+      duration >= TARGET_HOURS * 60 * 60 * 1000;
+
+    const entry = {
+      id: startTime,
+      date: new Date(startTime).toISOString().split("T")[0],
+      startTime,
+      endTime,
+      duration,
+      targetHours: TARGET_HOURS,
+      maxFastHours: MAX_FAST_HOURS,
+      achieved,
+      autoStopped: true,   // ← 自動終了
+      autoReset: false,
+    };
+
+    completeFast(entry);
+  }
+}, [elapsed, status, autoStopTriggered]);
+
 
   const TARGET = 16 * 60 * 60 * 1000; // 16時間
   const remaining = Math.max(TARGET - elapsed, 0);
-
-  const [lastDuration, setLastDuration] = useState<number | null>(null);
 
   const [visibleCount, setVisibleCount] = useState(20);
 
@@ -68,12 +117,33 @@ export const IFTimer = ({ lang }: { lang: "ja" | "en" }) => {
   }
 };
 
+  const handleStart = () => {
+    setAutoStopTriggered(false); // ← AutoStopフラグ初期化
+    start();
+  };
+
   const handleEnd = () => {
     const result = stop();
-    if (!result) return;
+if (!result) return;
 
-    setLastDuration(result.duration);
-    completeFast(result);
+const { startTime, endTime, duration } = result;
+const achieved =
+  duration >= TARGET_HOURS * 60 * 60 * 1000;
+
+const entry = {
+  id: startTime,
+  date: new Date(startTime).toISOString().split("T")[0],
+  startTime,
+  endTime,
+  duration,
+  targetHours: TARGET_HOURS,
+  maxFastHours: MAX_FAST_HOURS,
+  achieved,
+  autoStopped: false, 
+  autoReset: false,
+};
+
+completeFast(entry);
   };
 
   return (
@@ -133,15 +203,11 @@ export const IFTimer = ({ lang }: { lang: "ja" | "en" }) => {
       )}
 
       {/* 今回の結果 */}
-      {lastDuration !== null && (
-      <h4>
-       {TEXT[lang].thisFast}: {formatTime(lastDuration)}
-      </h4>
-      )}
+      
 
       {/* ボタン制御 */}
 {status === "idle" && (
-  <button onClick={start}>START FAST</button>
+  <button onClick={handleStart}>START FAST</button>
 )}
 
 {status === "running" && (
@@ -150,7 +216,7 @@ export const IFTimer = ({ lang }: { lang: "ja" | "en" }) => {
 
 {status === "completed" && (
   <>
-    <button onClick={start}>START AGAIN</button>
+    <button onClick={handleStart}>START AGAIN</button>
     <button onClick={reset}>RESET</button>
   </>
       )}

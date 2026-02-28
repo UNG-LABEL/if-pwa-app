@@ -1,3 +1,5 @@
+import type { FastHistory } from "./fast";
+
 export type TimerStatus = "idle" | "running" | "completed";
 
 export type IFPhase =
@@ -12,18 +14,10 @@ export interface TimerState {
   status: TimerStatus;
 }
 
-export interface IFHistoryEntry {
-  id: number;
-  date: string;
-  startTime: number;
-  endTime: number;
-  duration: number;
-  completed: boolean;
-}
 
 export interface IFStats {
   totalFastingMs: number;
   streakDays: number;
   lastCompletedDate: string | null;
-  history: IFHistoryEntry[];
+  history: FastHistory[];
 }

@@ -1,31 +1,24 @@
-import { IFHistoryEntry } from "../types/timer";
+import type { FastHistory } from "../types/fast";
 
 export const calculateStreakFromHistory = (
-  history: IFHistoryEntry[]
+  history: FastHistory[]
 ): number => {
-  if (!history || history.length === 0) return 0;
+  if (history.length === 0) return 0;
 
-  // 日付順に並べる
-  const sorted = [...history].sort((a, b) =>
-    a.date.localeCompare(b.date)
-  );
+  // ① 日付だけの配列を作る（重複排除）
+  const uniqueDates = Array.from(
+    new Set(history.map((entry) => entry.date))
+  ).sort((a, b) => (a > b ? -1 : 1)); // 新しい順
 
   let streak = 0;
+  let currentDate = new Date();
 
-  // 今日の日付
-  let currentDate = new Date().toISOString().split("T")[0];
+  for (let i = 0; i < uniqueDates.length; i++) {
+    const targetDate = currentDate.toISOString().split("T")[0];
 
-  for (let i = sorted.length - 1; i >= 0; i--) {
-    const entry = sorted[i];
-
-    if (!entry.completed) continue;
-
-    if (entry.date === currentDate) {
+    if (uniqueDates[i] === targetDate) {
       streak++;
-
-      const d = new Date(currentDate);
-      d.setDate(d.getDate() - 1);
-      currentDate = d.toISOString().split("T")[0];
+      currentDate.setDate(currentDate.getDate() - 1);
     } else {
       break;
     }
