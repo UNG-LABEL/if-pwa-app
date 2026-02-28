@@ -50,7 +50,7 @@ const TEXT = {
 };
 
 export const IFTimer = ({ lang }: { lang: "ja" | "en" }) => {
-  const MAX_FAST_HOURS = 24; // 仮（後でSettingsと連携）// Auto Stop 上限
+  const MAX_FAST_HOURS = 16; // 仮（後でSettingsと連携）// Auto Stop 上限
 
   const { start, stop, reset, elapsed, status, startTime } =
     useTimer();

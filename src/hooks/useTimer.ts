@@ -19,13 +19,15 @@ export const useTimer = () => {
     }
   }, []);
 
-  // 🔥 タイマー更新
+  // 🔥 タイマー更新（純粋な時間計測のみ）
   useEffect(() => {
     let interval: ReturnType<typeof setInterval> | null = null;
 
     if (status === "running" && startTime !== null) {
       interval = setInterval(() => {
-        setElapsed(Date.now() - startTime);
+        const now = Date.now();
+        const newElapsed = now - startTime;
+        setElapsed(newElapsed);
       }, 1000);
     }
 
