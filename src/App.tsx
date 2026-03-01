@@ -9,6 +9,8 @@ import Trust from "./components/Trust";
 
 import { IFTimer } from "./components/IFTimer";
 
+import "./App.css";
+
 type LangKey = keyof typeof languages;
 
 function App() {

@@ -1,3 +1,105 @@
 body {
   font-family: sans-serif;
 }
+
+body {
+  margin: 0;
+  background: radial-gradient(
+    circle at center,
+    #0f1c2e 0%,
+    #050b16 60%,
+    #000000 100%
+  );
+  color: #e6f2ff;
+  font-family: 'Inter', sans-serif;
+}
+
+
+
+button {
+  background: transparent;
+  border: 1px solid #3fa9ff;
+  color: #3fa9ff;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background: #3fa9ff;
+  color: #000;
+  box-shadow: 0 0 15px #3fa9ff;
+}
+
+
+.timer-display {
+  position: absolute;
+  width: 186px;
+  height: 186px;
+  border-radius: 50%;
+  top: 37%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: bold;
+  background: radial-gradient(circle, #112244 0%, #0a1222 70%);
+  box-shadow: 0 0 20px rgba(0,150,255,0.3);
+  transition: all 0.4s ease;
+}
+
+
+.timer-display.active {
+  box-shadow:
+    0 0 25px rgba(0,150,255,0.6),
+    0 0 20px rgba(0,180,255,0.3);
+}
+
+.timer-wrapper {
+  position: relative;
+  width: 240px;
+  height: 240px;
+  margin: 40px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.progress-ring {
+  transform: rotate(-90deg);
+  overflow: visible;
+}
+
+.progress-ring-progress {
+  transition: stroke-dashoffset 0.3s linear;
+  filter: drop-shadow(0 0 8px #00bfff);
+  animation: pulseGlow 4s infinite ease-in-out;
+}
+
+@keyframes pulseGlow {
+  0% {
+    filter: drop-shadow(0 0 4px #00bfff);
+  }
+  50% {
+    filter: drop-shadow(0 0 20px #5ce1ff);
+  }
+  100% {
+    filter: drop-shadow(0 0 4px #00bfff);
+  }
+}
+.progress-ring-progress.running {
+  animation: pulseGlow 2.5s infinite ease-in-out;
+}
+
+.progress-ring-progress.completed {
+  stroke: #e0f7ff;
+  filter: drop-shadow(0 0 20px #ffffff);
+  animation: none;
+  transition: all 0.8s ease;
+}
+
+

@@ -59,7 +59,11 @@ export const IFTimer = ({ lang }: { lang: "ja" | "en" }) => {
 
   const [autoStopTriggered, setAutoStopTriggered] = useState(false);
 
-
+  const progress = Math.min(
+    (elapsed / (MAX_FAST_HOURS * 60 * 60 * 1000)) * 100,
+    100
+  );
+  
   
     useEffect(() => {
   // running中でなければ何もしない
@@ -154,6 +158,45 @@ completeFast(entry);
      </div>
       <h2>{TEXT[lang].timerTitle}</h2>
 
+      <div className="timer-wrapper">
+        <svg className="progress-ring" width="260" height="260"
+             viewBox="-10 -10 260 260">
+          <defs>
+            <linearGradient id="igniteGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#00bfff" />
+              <stop offset="100%" stopColor="#5ce1ff" />
+            </linearGradient>
+          </defs>
+
+          <circle
+            stroke="#1a2a44"
+            strokeWidth="0"
+            fill="transparent"
+            r="100"
+            cx="120"
+            cy="120"
+          />
+
+          <circle
+            stroke="url(#igniteGradient)"
+            strokeWidth="12"
+            fill="transparent"
+            r="100"
+            cx="120"
+            cy="120"
+            strokeDasharray={2 * Math.PI * 100}
+            strokeDashoffset={2 * Math.PI * 100 * (1 - progress / 100)}
+            className={`progress-ring-progress 
+              ${status === "completed" ? "completed" : ""}
+              ${status === "running" ? "running" : ""}
+            `}
+          />
+        </svg>
+
+        <div className={`timer-display ${status === "running" ? "active" : ""}`}>
+          {formatTime(elapsed)}
+       </div>
+     </div>
 
       <h3>
       {TEXT[lang].streak}: {streak}
@@ -284,6 +327,8 @@ completeFast(entry);
   >
     {TEXT[lang].loadMore}
   </button>
+
+  
 )}
 
     </div>
