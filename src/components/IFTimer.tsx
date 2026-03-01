@@ -187,13 +187,17 @@ completeFast(entry);
             strokeDasharray={2 * Math.PI * 100}
             strokeDashoffset={2 * Math.PI * 100 * (1 - progress / 100)}
             className={`progress-ring-progress 
-              ${status === "completed" ? "completed" : ""}
-              ${status === "running" ? "running" : ""}
+              status === "running" ? "running" : ""}
+             ${status === "completed" ? "completed" : ""}
             `}
           />
         </svg>
 
-        <div className={`timer-display ${status === "running" ? "active" : ""}`}>
+        <div className={`timer-display
+               ${status === "running" ? "running" : ""}
+               ${status === "completed" ? "completed" : ""}
+             `}
+           >
           {formatTime(elapsed)}
        </div>
      </div>
