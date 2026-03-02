@@ -28,7 +28,7 @@ const TEXT = {
     loadMore: "もっと見る",
   },
   en: {
-    timerTitle: "Ignite",
+    timerTitle: "IF IGNITE SESSION",
     streak: "Streak",
     days: "days",
     average: "Average Fast",
@@ -187,8 +187,8 @@ completeFast(entry);
             strokeDasharray={2 * Math.PI * 100}
             strokeDashoffset={2 * Math.PI * 100 * (1 - progress / 100)}
             className={`progress-ring-progress 
-              status === "running" ? "running" : ""}
-             ${status === "completed" ? "completed" : ""}
+              ${status === "running" ? "running" : ""}
+              ${status === "completed" ? "completed" : ""}
             `}
           />
         </svg>
@@ -219,31 +219,38 @@ completeFast(entry);
         <>
           <h2>{TEXT[lang].fastMode}</h2>
 
-          <p>{TEXT[lang].remaining} {formatTime(remaining)}</p>
-          <p>{TEXT[lang].elapsed} {formatTime(elapsed)}</p>
+          <div className="stats-container">
+            <div>
+              {TEXT[lang].remaining} {formatTime(remaining)}
+            </div>
+            <div>
+              {TEXT[lang].elapsed} {formatTime(elapsed)}
+            </div>
 
-          {startTime && (
-           <>
-            <p>
-              {TEXT[lang].started}:{" "}
-              {new Date(startTime).toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
-             </p>
-             <p>
-              {TEXT[lang].ends}:{" "}
-              {new Date(startTime + TARGET).toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
-            </p>
-            </>
-          )}
+            {startTime && (
+              <>
+                <div>
+                  {TEXT[lang].started}{" "}
+                  {new Date(startTime).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </div>
+
+                <div>
+                  {TEXT[lang].ends}{" "}
+                  {new Date(startTime + TARGET).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </div>
+              </>
+            )}
+          </div>
 
           {elapsed >= TARGET && (
             <h3 style={{ color: "green" }}>
-             {TEXT[lang].achieved}
+              {TEXT[lang].achieved}
             </h3>
           )}
         </>
@@ -262,11 +269,15 @@ completeFast(entry);
 )}
 
 {status === "completed" && (
-  <>
-    <button onClick={handleStart}>START AGAIN</button>
-    <button onClick={reset}>RESET</button>
-  </>
-      )}
+  <div className="button-group">
+    <button onClick={handleStart}>
+      {TEXT[lang].startAgain}
+    </button>
+    <button onClick={reset}>
+      {TEXT[lang].reset}
+    </button>
+  </div>
+)}
 
       <hr style={{ margin: "20px 0" }} />
 

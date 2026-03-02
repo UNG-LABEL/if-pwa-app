@@ -12,6 +12,7 @@ body {
 
 
 button {
+  position: relative;
   background: transparent;
   border: 1px solid #3fa9ff;
   color: #3fa9ff;
@@ -20,6 +21,7 @@ button {
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
+  z-index: 5;
 }
 
 button:hover {
@@ -47,18 +49,7 @@ button:hover {
   transition: all 0.4s ease;
   animation: ignitePulse 4s ease-in-out infinite;
   animation-fill-mode: both;
-}
-
-@keyframes slowPulse {
-  0% {
-    box-shadow: 0 0 10px rgba(0,150,255,0.25);
-  }
-  50% {
-    box-shadow: 0 0 28px rgba(0,180,255,0.55);
-  }
-  100% {
-    box-shadow: 0 0 10px rgba(0,150,255,0.25);
-  }
+  pointer-events: none;
 }
 
 
@@ -75,21 +66,26 @@ button:hover {
   width: 240px;
   height: 240px;
   margin: 40px auto;
+  margin-bottom: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 1;
+  background: red;
 }
 
 .progress-ring {
   transform: rotate(-90deg);
   overflow: visible;
+  pointer-events: none;
 }
 
 .progress-ring-progress {
   transition: stroke-dashoffset 0.3s linear;
-  filter: drop-shadow(0 0 14px #00bfff);
+  filter: none;
   animation: ignitePulse 4s ease-in-out infinite;
   animation-fill-mode: both;
+  pointer-events: none;
 }
 
 
@@ -113,7 +109,7 @@ button:hover {
     filter: drop-shadow(0 0 8px #00bfff);
   }
   50% {
-    box-shadow: 0 0 34px rgba(0,180,255,0.6);
+    box-shadow: 0 0 40px rgba(0,180,255,0.6);
     filter: drop-shadow(0 0 22px #5ce1ff);
   }
   100% {
@@ -122,4 +118,36 @@ button:hover {
   }
 }
 
+.stats-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 12px;
+  font-size: 13px;
+}
 
+@media (max-width: 480px) {
+  .timer-wrapper {
+    transform: scale(0.9);
+  }
+
+  .stats-container {
+    font-size: 12px;
+  }
+
+  .end-button {
+    margin-top: 12px;
+  }
+}
+
+.button-group {
+  position: relative;
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+  margin-top: 10px;
+  z-index: 5;
+}
+
+.button-group button {
+  padding: 8px 14px;
+}
