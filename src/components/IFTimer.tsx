@@ -1,7 +1,7 @@
 import { useTimer } from "../hooks/useTimer";
 import { useIFStats } from "../hooks/useIFStats";
 import { useState, useEffect } from "react";
-
+import IgniteLogo from "../components/IgniteLogo";
 
 const TARGET_HOURS = 16;      // あなたの目標時間
 
@@ -58,7 +58,7 @@ export const IFTimer = ({ lang }: { lang: "ja" | "en" }) => {
   const { streak, history, averageDuration, completeFast } = useIFStats();
 
   const [autoStopTriggered, setAutoStopTriggered] = useState(false);
-
+  const [igniteMoment, setIgniteMoment] = useState(false);
   const progress = Math.min(
     (elapsed / (MAX_FAST_HOURS * 60 * 60 * 1000)) * 100,
     100
@@ -122,8 +122,15 @@ export const IFTimer = ({ lang }: { lang: "ja" | "en" }) => {
 };
 
   const handleStart = () => {
-    setAutoStopTriggered(false); // ← AutoStopフラグ初期化
-    start();
+    setAutoStopTriggered(false);
+  
+    // 🔥 IGNITE演出開始
+    setIgniteMoment(true);
+  
+    setTimeout(() => {
+      setIgniteMoment(false);
+      start(); // ← 3秒後に実際のタイマー開始
+    }, 3000);
   };
 
   const handleEnd = () => {
@@ -153,10 +160,19 @@ completeFast(entry);
   return (
     <div>
 
+      {igniteMoment && (
+        <div className="ignite-overlay">
+          <IgniteLogo variant="overlay" />
+        </div>
+      )}
+
       <div style={{ marginBottom: "10px" }}>
       
      </div>
-      <h2>{TEXT[lang].timerTitle}</h2>
+      <div className="session-title">
+        {TEXT[lang].timerTitle}
+        <IgniteLogo variant="icon" size="small" />
+      </div>
 
       <div className="timer-wrapper">
         <svg className="progress-ring" width="260" height="260"
@@ -220,29 +236,49 @@ completeFast(entry);
           <h2>{TEXT[lang].fastMode}</h2>
 
           <div className="stats-container">
-            <div>
-              {TEXT[lang].remaining} {formatTime(remaining)}
+            <div className="stat-item">
+              <span className="stat-label">
+                {TEXT[lang].remaining}
+              </span>
+              <span className="stat-value">
+                {formatTime(remaining)}
+              </span>
             </div>
-            <div>
-              {TEXT[lang].elapsed} {formatTime(elapsed)}
+
+            <div className="stat-item">
+              <span className="stat-label">
+                {TEXT[lang].elapsed}
+              </span>
+              <span className="stat-value">
+                {formatTime(elapsed)}
+              </span>
             </div>
+
 
             {startTime && (
               <>
-                <div>
-                  {TEXT[lang].started}{" "}
-                  {new Date(startTime).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
+                <div className="stat-item">
+                  <span className="stat-label">
+                    {TEXT[lang].started}
+                  </span>
+                  <span className="stat-value">
+                    {new Date(startTime).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </span>
                 </div>
-
-                <div>
-                  {TEXT[lang].ends}{" "}
-                  {new Date(startTime + TARGET).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
+            
+                <div className="stat-item">
+                  <span className="stat-label">
+                    {TEXT[lang].ends}
+                  </span>
+                  <span className="stat-value">
+                    {new Date(startTime + TARGET).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </span>
                 </div>
               </>
             )}
@@ -256,8 +292,6 @@ completeFast(entry);
         </>
       )}
 
-      {/* 今回の結果 */}
-      
 
       {/* ボタン制御 */}
 {status === "idle" && (
