@@ -194,3 +194,83 @@ button:hover {
   font-weight: 600;
   color: #8bd3ff;
 }
+
+.ignite-video-overlay{
+
+position:fixed;
+
+top:0;
+left:0;
+
+width:100%;
+height:100%;
+
+background:black;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+z-index:99999;
+
+overflow:hidden;
+
+}
+
+.ignite-video{
+
+position:absolute;
+
+top:0;
+left:0;
+
+width:100%;
+height:100%;
+
+object-fit:cover;
+
+opacity:0.95;
+
+mix-blend-mode:screen;
+
+}
+
+.ignite-text{
+
+position:relative;
+
+color:white;
+
+font-size:48px;
+
+letter-spacing:6px;
+
+text-align:center;
+
+z-index:2;
+
+text-shadow:
+0 0 10px #9fe6ff,
+0 0 30px #00bfff,
+0 0 60px #00bfff;
+
+animation:igniteFade 3s ease-out;
+
+}
+
+@keyframes igniteFade{
+
+0%{
+opacity:0;
+transform:scale(0.9);
+}
+
+30%{
+opacity:1;
+}
+
+100%{
+opacity:1;
+}
+
+}

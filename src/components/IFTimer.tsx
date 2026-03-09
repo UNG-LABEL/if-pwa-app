@@ -161,10 +161,25 @@ completeFast(entry);
     <div>
 
       {igniteMoment && (
-        <div className="ignite-overlay">
-          <IgniteLogo variant="overlay" />
-        </div>
-      )}
+  <div className="ignite-video-overlay">
+
+    <video
+      autoPlay
+      muted
+      playsInline
+      preload="auto"
+      className="ignite-video"
+    >
+      <source src="/video/test_overlay_2.webm" type="video/webm" />
+      <source src="/video/test_overlay_1.mp4" type="video/mp4" />
+    </video>
+
+    <div className="ignite-text">
+      IGNITE WITHIN
+    </div>
+
+  </div>
+)}
 
       <div style={{ marginBottom: "10px" }}>
       

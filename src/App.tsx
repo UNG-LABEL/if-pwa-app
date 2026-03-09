@@ -8,7 +8,7 @@ import Modal from "./components/Modal";
 import Trust from "./components/Trust";
 
 import { IFTimer } from "./components/IFTimer";
-
+import IgniteOverlay from "./components/IgniteOverlay"
 import "./App.css";
 
 type LangKey = keyof typeof languages;
