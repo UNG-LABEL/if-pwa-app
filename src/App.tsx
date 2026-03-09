@@ -19,13 +19,25 @@ function App() {
   return (saved as LangKey) || "ja";
 });
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [ignite, setIgnite] = useState(false);
+
   const t = languages[lang];
 useEffect(() => {
   localStorage.setItem("lang", lang);
 }, [lang]);
 
+const handleIgniteFinish = () => {
+  setIgnite(false);
+};
+
   return (
+  <>
+    {ignite && (
+      <IgniteOverlay onFinish={handleIgniteFinish} />
+    )}
+
     <div style={{ fontFamily: "sans-serif" }}>
+
       {/* 言語切替 */}
       <div className="lang-switch">
   <button onClick={() => setLang("ja")} disabled={lang === "ja"}>
@@ -65,7 +77,8 @@ useEffect(() => {
 <IFTimer lang={lang} />
 
 
-    </div>
+   </div>
+  </>
   );
 }
 
