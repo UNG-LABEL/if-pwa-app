@@ -8,7 +8,7 @@ import Modal from "./components/Modal";
 import Trust from "./components/Trust";
 
 import { IFTimer } from "./components/IFTimer";
-import IgniteOverlay from "./components/IgniteOverlay"
+
 import "./App.css";
 
 type LangKey = keyof typeof languages;
@@ -19,22 +19,15 @@ function App() {
   return (saved as LangKey) || "ja";
 });
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [ignite, setIgnite] = useState(false);
+
 
   const t = languages[lang];
 useEffect(() => {
   localStorage.setItem("lang", lang);
 }, [lang]);
 
-const handleIgniteFinish = () => {
-  setIgnite(false);
-};
-
   return (
   <>
-    {ignite && (
-      <IgniteOverlay onFinish={handleIgniteFinish} />
-    )}
 
     <div style={{ fontFamily: "sans-serif" }}>
 
