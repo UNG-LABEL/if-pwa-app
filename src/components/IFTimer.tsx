@@ -50,7 +50,7 @@ const TEXT = {
 };
 
 export const IFTimer = ({ lang }: { lang: "ja" | "en" }) => {
-  const MAX_FAST_HOURS = 16; // 仮（後でSettingsと連携）// Auto Stop 上限
+  const MAX_FAST_HOURS = 24; // 仮（後でSettingsと連携）// Auto Stop 上限
 
   const { start, stop, reset, elapsed, status, startTime } =
     useTimer();
@@ -130,7 +130,7 @@ export const IFTimer = ({ lang }: { lang: "ja" | "en" }) => {
     setTimeout(() => {
       setIgniteMoment(false);
       start(); // ← 3秒後に実際のタイマー開始
-    }, 3000);
+    }, 4000);
   };
 
   const handleEnd = () => {
@@ -190,7 +190,7 @@ completeFast(entry);
       </div>
 
       <div className="timer-wrapper">
-        <svg className="progress-ring" width="260" height="260"
+        <svg className="progress-ring" width="350" height="350"
              viewBox="-10 -10 260 260">
           <defs>
             <linearGradient id="igniteGradient" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -203,9 +203,9 @@ completeFast(entry);
             stroke="#1a2a44"
             strokeWidth="0"
             fill="transparent"
-            r="100"
-            cx="120"
-            cy="120"
+            r="120"
+            cx="150"
+            cy="150"
           />
 
           <circle
