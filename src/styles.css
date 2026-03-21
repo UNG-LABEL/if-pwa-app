@@ -75,7 +75,7 @@ section {
 
 
 h1 {
-  font-size: 40px;
+  font-size: 30px;
   margin-bottom: 16px;
 }
 
@@ -266,26 +266,3 @@ h1, h2, h3, p, button {
 body {
   word-break: break-word;
 }
-
-.stats-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px 12px;
-  font-size: 13px;
-}
-
-@media (max-width: 480px) {
-  .timer-wrapper {
-    transform: scale(0.9);
-  }
-
-  .stats-container {
-    font-size: 12px;
-  }
-
-  .end-button {
-    margin-top: 12px;
-  }
-}
-
-

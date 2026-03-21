@@ -49,7 +49,48 @@ const TEXT = {
   },
 };
 
+
+const IGNITE_MESSAGE_PAIRS = [
+  { start: "DISCIPLINE IGNITES POWER", end: "POWER PROVES DISCIPLINE" },
+  { start: "FASTING BUILDS CLARITY", end: "CLARITY GUIDES ACTION" },
+  { start: "CONTROL THE BODY", end: "THE BODY OBEYS" },
+  { start: "FREE THE MIND", end: "THE MIND EXPANDS" },
+  { start: "STRENGTH IS BUILT IN SILENCE", end: "SILENCE CREATES STRENGTH" },
+  { start: "HUNGER SHARPENS PURPOSE", end: "PURPOSE OVERCOMES HUNGER" },
+  { start: "CALM THE NOISE", end: "CLARITY REMAINS" },
+  { start: "FOCUS THE FIRE", end: "FIRE BECOMES POWER" },
+  { start: "YOUR WILL IS YOUR WEAPON", end: "DISCIPLINE WINS" },
+  { start: "THE BODY OBEYS THE MIND", end: "THE MIND LEADS" },
+  { start: "LESS CONSUME MORE BECOME", end: "BECOME WHAT YOU SEEK" },
+  { start: "IGNITE YOUR FUTURE", end: "THE FUTURE IS YOURS" }
+];
+
+
+
+const getTodayPairIndex = () => {
+
+  const today = new Date().toISOString().split("T")[0];
+
+  const savedDate = localStorage.getItem("igniteDate");
+  let index = Number(localStorage.getItem("igniteIndex") || 0);
+
+  if (savedDate !== today) {
+    index = (index + 1) % IGNITE_MESSAGE_PAIRS.length;
+
+    localStorage.setItem("igniteDate", today);
+    localStorage.setItem("igniteIndex", String(index));
+  }
+
+  return index;
+};
+
+
+
 export const IFTimer = ({ lang }: { lang: "ja" | "en" }) => {
+
+  const [igniteMessage, setIgniteMessage] = useState("");
+const [ignitePairIndex, setIgnitePairIndex] = useState(0);
+
   const MAX_FAST_HOURS = 24; // 仮（後でSettingsと連携）// Auto Stop 上限
 
   const { start, stop, reset, elapsed, status, startTime } =
@@ -58,7 +99,10 @@ export const IFTimer = ({ lang }: { lang: "ja" | "en" }) => {
   const { streak, history, averageDuration, completeFast } = useIFStats();
 
   const [autoStopTriggered, setAutoStopTriggered] = useState(false);
+  
   const [igniteMoment, setIgniteMoment] = useState(false);
+  const [ignitePhase, setIgnitePhase] = useState(0);
+
   const progress = Math.min(
     (elapsed / (MAX_FAST_HOURS * 60 * 60 * 1000)) * 100,
     100
@@ -122,20 +166,37 @@ export const IFTimer = ({ lang }: { lang: "ja" | "en" }) => {
 };
 
   const handleStart = () => {
-    setAutoStopTriggered(false);
+  setAutoStopTriggered(false);
+
+  const index = getTodayPairIndex();
+  setIgnitePairIndex(index);
+
+  const message = IGNITE_MESSAGE_PAIRS[index].start;
+
+  setIgniteMessage(message);
   
-    // 🔥 IGNITE演出開始
-    setIgniteMoment(true);
-  
-    setTimeout(() => {
-      setIgniteMoment(false);
-      start(); // ← 3秒後に実際のタイマー開始
-    }, 4000);
-  };
+  setIgniteMoment(true);
+  setIgnitePhase(1);   // Ignite表示
+
+  setTimeout(() => {
+    setIgnitePhase(2); // メッセージ表示
+  }, 2000);
+
+  setTimeout(() => {
+    setIgniteMoment(false);
+    setIgnitePhase(0);
+    start();           // タイマー開始
+  }, 4000);
+};
 
   const handleEnd = () => {
     const result = stop();
-if (!result) return;
+
+    setIgniteMessage(
+      IGNITE_MESSAGE_PAIRS[ignitePairIndex].end
+    );
+
+  if (!result) return;
 
 const { startTime, endTime, duration } = result;
 const achieved =
@@ -157,6 +218,11 @@ const entry = {
 completeFast(entry);
   };
 
+const handleReset = () => {
+  reset();
+  setIgniteMessage("");
+};
+
   return (
     <div>
 
@@ -174,10 +240,17 @@ completeFast(entry);
       <source src="/video/test_overlay_1.mp4" type="video/mp4" />
     </video>
 
-    <div className="ignite-text">
-      IGNITE WITHIN
-    </div>
+    {ignitePhase === 1 && (
+      <div className="ignite-text">
+        IGNITE WITHIN
+      </div>
+    )}
 
+    {ignitePhase === 2 && (
+      <div className="ignite-message">
+        {igniteMessage}
+      </div>
+    )}
   </div>
 )}
 
@@ -189,9 +262,15 @@ completeFast(entry);
         <IgniteLogo variant="icon" size="small" />
       </div>
 
+   {igniteMessage && (
+     <div className="ignite-daily-message">
+       {igniteMessage}
+     </div>
+   )}
+
       <div className="timer-wrapper">
         <svg className="progress-ring" width="350" height="350"
-             viewBox="-10 -10 260 260">
+             viewBox="0 0 300 300">
           <defs>
             <linearGradient id="igniteGradient" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stopColor="#00bfff" />
@@ -308,6 +387,7 @@ completeFast(entry);
       )}
 
 
+
       {/* ボタン制御 */}
 {status === "idle" && (
   <button onClick={handleStart}>START FAST</button>
@@ -317,12 +397,13 @@ completeFast(entry);
   <button onClick={handleEnd}>END FAST</button>
 )}
 
+
 {status === "completed" && (
   <div className="button-group">
     <button onClick={handleStart}>
       {TEXT[lang].startAgain}
     </button>
-    <button onClick={reset}>
+    <button onClick={handleReset}>
       {TEXT[lang].reset}
     </button>
   </div>
