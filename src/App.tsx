@@ -14,67 +14,65 @@ import "./App.css";
 type LangKey = keyof typeof languages;
 
 function App() {
+  // ① 言語state（既存OK）
   const [lang, setLang] = useState<LangKey>(() => {
-  const saved = localStorage.getItem("lang");
-  return (saved as LangKey) || "ja";
-});
+    const saved = localStorage.getItem("lang");
+    return (saved as LangKey) || "ja";
+  });
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const t = languages[lang] || languages["en"];
 
-  const t = languages[lang];
-useEffect(() => {
-  localStorage.setItem("lang", lang);
-}, [lang]);
+  // ② 保存（既存OK）
+  useEffect(() => {
+    localStorage.setItem("lang", lang);
+  }, [lang]);
 
   return (
-  <>
+    <>
+      <div style={{ fontFamily: "sans-serif" }}>
+        
+        {/* ③ 言語切替（6言語化） */}
+        <div className="lang-switch">
+          {["ja", "en", "es", "pt", "id", "fr"].map((l) => (
+            <button
+              key={l}
+              onClick={() => setLang(l as LangKey)}
+              disabled={lang === l}
+            >
+              {l.toUpperCase()}
+            </button>
+          ))}
+        </div>
 
-    <div style={{ fontFamily: "sans-serif" }}>
+        <Hero
+          t={t.hero}
+          onOpenModal={() => setIsModalOpen(true)}
+        />
 
-      {/* 言語切替 */}
-      <div className="lang-switch">
-  <button onClick={() => setLang("ja")} disabled={lang === "ja"}>
-    JP
-  </button>
-  <button
-    onClick={() => setLang("en")}
-    disabled={lang === "en"}
-  >
-    EN
-  </button>
-</div>
+        <Problem t={t.problem} />
 
-      <Hero
-  t={t.hero}
-  onOpenModal={() => setIsModalOpen(true)}
-/>
+        <Benefits t={t.benefits} />
 
-     <Problem t={t.problem} />
+        <Trust t={t.trust} />
 
-     <Benefits t={t.benefits} />
+        <CTA t={t.cta} onOpen={() => setIsModalOpen(true)} />
 
-     <Trust t={t.trust} />
+        <Modal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          t={t.modal}
+        />
 
-     <CTA t={t.cta} onOpen={() => setIsModalOpen(true)} />
+        <hr style={{ margin: "40px 0" }} />
 
+        {/* ④ langを渡す（ここ超重要） */}
+        <IFTimer lang={lang} />
 
-<Modal
-  isOpen={isModalOpen}
-  onClose={() => setIsModalOpen(false)}
-  t={t.modal}
-/>
-
-
-
-<hr style={{ margin: "40px 0" }} />
-<IFTimer lang={lang} />
-
-
-   </div>
-  </>
+      </div>
+    </>
   );
 }
-
-
 
 export default App;

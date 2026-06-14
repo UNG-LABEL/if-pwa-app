@@ -2,9 +2,11 @@ import { useTimer } from "../hooks/useTimer";
 import { useIFStats } from "../hooks/useIFStats";
 import { useState, useEffect } from "react";
 import IgniteLogo from "../components/IgniteLogo";
+import { messages } from "../data/messages";
 
-const TARGET_HOURS = 16;      // あなたの目標時間
+const TARGET_HOURS = 16;
 
+type Lang = "ja" | "en" | "es" | "pt" | "id" | "fr"; // 🔥 拡張
 
 const TEXT = {
   ja: {
@@ -47,36 +49,95 @@ const TEXT = {
     noHistory: "No records yet",
     loadMore: "Load More",
   },
+  es: {
+    timerTitle: "SESION IF",
+    streak: "Racha",
+    days: "días",
+    average: "Promedio",
+    fastMode: "MODO AYUNO",
+    remaining: "Restante",
+    elapsed: "Transcurrido",
+    started: "Inicio",
+    ends: "Fin",
+    achieved: "🎉 ¡16 horas logrado!",
+    thisFast: "Este ayuno",
+    startFast: "INICIAR",
+    endFast: "FINALIZAR",
+    startAgain: "REINICIAR",
+    reset: "RESET",
+    history: "Historial",
+    noHistory: "Sin registros",
+    loadMore: "Ver más",
+  },
+  pt: {
+    timerTitle: "SESSÃO IF",
+    streak: "Sequência",
+    days: "dias",
+    average: "Média",
+    fastMode: "MODO JEJUM",
+    remaining: "Restante",
+    elapsed: "Decorrido",
+    started: "Início",
+    ends: "Fim",
+    achieved: "🎉 16h atingidas!",
+    thisFast: "Este jejum",
+    startFast: "INICIAR",
+    endFast: "ENCERRAR",
+    startAgain: "REINICIAR",
+    reset: "RESET",
+    history: "Histórico",
+    noHistory: "Sem registros",
+    loadMore: "Ver mais",
+  },
+  id: {
+    timerTitle: "SESI IF",
+    streak: "Streak",
+    days: "hari",
+    average: "Rata-rata",
+    fastMode: "MODE PUASA",
+    remaining: "Sisa",
+    elapsed: "Berjalan",
+    started: "Mulai",
+    ends: "Selesai",
+    achieved: "🎉 16 jam tercapai!",
+    thisFast: "Puasa ini",
+    startFast: "MULAI",
+    endFast: "SELESAI",
+    startAgain: "ULANGI",
+    reset: "RESET",
+    history: "Riwayat",
+    noHistory: "Belum ada",
+    loadMore: "Lihat lagi",
+  },
+  fr: {
+    timerTitle: "SESSION IF",
+    streak: "Série",
+    days: "jours",
+    average: "Moyenne",
+    fastMode: "MODE JEÛNE",
+    remaining: "Restant",
+    elapsed: "Écoulé",
+    started: "Début",
+    ends: "Fin",
+    achieved: "🎉 16h atteintes!",
+    thisFast: "Ce jeûne",
+    startFast: "COMMENCER",
+    endFast: "TERMINER",
+    startAgain: "RECOMMENCER",
+    reset: "RESET",
+    history: "Historique",
+    noHistory: "Aucun enregistrement",
+    loadMore: "Voir plus",
+  },
 };
 
-
-const IGNITE_MESSAGE_PAIRS = [
-  { start: "DISCIPLINE IGNITES POWER", end: "POWER PROVES DISCIPLINE" },
-  { start: "FASTING BUILDS CLARITY", end: "CLARITY GUIDES ACTION" },
-  { start: "CONTROL THE BODY", end: "THE BODY OBEYS" },
-  { start: "FREE THE MIND", end: "THE MIND EXPANDS" },
-  { start: "STRENGTH IS BUILT IN SILENCE", end: "SILENCE CREATES STRENGTH" },
-  { start: "HUNGER SHARPENS PURPOSE", end: "PURPOSE OVERCOMES HUNGER" },
-  { start: "CALM THE NOISE", end: "CLARITY REMAINS" },
-  { start: "FOCUS THE FIRE", end: "FIRE BECOMES POWER" },
-  { start: "YOUR WILL IS YOUR WEAPON", end: "DISCIPLINE WINS" },
-  { start: "THE BODY OBEYS THE MIND", end: "THE MIND LEADS" },
-  { start: "LESS CONSUME MORE BECOME", end: "BECOME WHAT YOU SEEK" },
-  { start: "IGNITE YOUR FUTURE", end: "THE FUTURE IS YOURS" }
-];
-
-
-
-const getTodayPairIndex = () => {
-
+const getTodayPairIndex = (length: number) => {
   const today = new Date().toISOString().split("T")[0];
-
   const savedDate = localStorage.getItem("igniteDate");
   let index = Number(localStorage.getItem("igniteIndex") || 0);
 
   if (savedDate !== today) {
-    index = (index + 1) % IGNITE_MESSAGE_PAIRS.length;
-
+    index = (index + 1) % length;
     localStorage.setItem("igniteDate", today);
     localStorage.setItem("igniteIndex", String(index));
   }
@@ -84,42 +145,35 @@ const getTodayPairIndex = () => {
   return index;
 };
 
+export const IFTimer = ({ lang }: { lang: Lang }) => {
+  const [ignitePairIndex, setIgnitePairIndex] = useState<number | null>(null);
+  const [igniteType, setIgniteType] = useState<"start" | "end" | null>(null);
 
+  const messageSet = messages[lang] || messages["en"]|| []; // 🔥 核
+  const MAX_FAST_HOURS = 24;
 
-export const IFTimer = ({ lang }: { lang: "ja" | "en" }) => {
-
-  const [igniteMessage, setIgniteMessage] = useState("");
-const [ignitePairIndex, setIgnitePairIndex] = useState(0);
-
-  const MAX_FAST_HOURS = 24; // 仮（後でSettingsと連携）// Auto Stop 上限
-
-  const { start, stop, reset, elapsed, status, startTime } =
-    useTimer();
-
+  const { start, stop, reset, elapsed, status, startTime } = useTimer();
   const { streak, history, averageDuration, completeFast } = useIFStats();
 
   const [autoStopTriggered, setAutoStopTriggered] = useState(false);
-  
   const [igniteMoment, setIgniteMoment] = useState(false);
   const [ignitePhase, setIgnitePhase] = useState(0);
 
   const progress = Math.min(
-    (elapsed / (MAX_FAST_HOURS * 60 * 60 * 1000)) * 100,
-    100
-  );
-  
-  
-    useEffect(() => {
-  // running中でなければ何もしない
-  if (status !== "running") return;
+  (elapsed / (MAX_FAST_HOURS * 60 * 60 * 1000)) * 100,
+  100
+);
+  const RADIUS = 130;
+  const STROKE = 12;
+  const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
-  // すでにAutoStop発動済みなら何もしない（🔥 二重防止）
+useEffect(() => {
+  if (status !== "running") return;
   if (autoStopTriggered) return;
 
   const maxDuration = MAX_FAST_HOURS * 60 * 60 * 1000;
 
   if (elapsed >= maxDuration) {
-    // 🔥 ここで即ロック（これが最重要）
     setAutoStopTriggered(true);
 
     const result = stop();
@@ -130,7 +184,7 @@ const [ignitePairIndex, setIgnitePairIndex] = useState(0);
     const achieved =
       duration >= TARGET_HOURS * 60 * 60 * 1000;
 
-    const entry = {
+    completeFast({
       id: startTime,
       date: new Date(startTime).toISOString().split("T")[0],
       startTime,
@@ -139,89 +193,90 @@ const [ignitePairIndex, setIgnitePairIndex] = useState(0);
       targetHours: TARGET_HOURS,
       maxFastHours: MAX_FAST_HOURS,
       achieved,
-      autoStopped: true,   // ← 自動終了
+      autoStopped: true,
       autoReset: false,
-    };
-
-    completeFast(entry);
+    });
   }
 }, [elapsed, status, autoStopTriggered]);
 
 
-  const TARGET = 16 * 60 * 60 * 1000; // 16時間
+
+
+  const TARGET = 16 * 60 * 60 * 1000;
   const remaining = Math.max(TARGET - elapsed, 0);
 
   const [visibleCount, setVisibleCount] = useState(20);
 
 
-  const formatTime = (ms: number) => {
+const formatTime = (ms: number) => {
   const h = Math.floor(ms / 3600000);
   const m = Math.floor((ms % 3600000) / 60000);
 
-  if (lang === "ja") {
-    return `${h}時間${m}分`;
-  } else {
-    return `${h}h ${m}m`;
-  }
+  return lang === "ja"
+    ? `${h}時間${m}分`
+    : `${h}h ${m}m`;
 };
+
 
   const handleStart = () => {
-  setAutoStopTriggered(false);
+    setAutoStopTriggered(false);
 
-  const index = getTodayPairIndex();
-  setIgnitePairIndex(index);
+    const index = getTodayPairIndex(messageSet.length || 1);
+    setIgnitePairIndex(index);
+    setIgniteType("start");
+    
 
-  const message = IGNITE_MESSAGE_PAIRS[index].start;
+    setIgniteMoment(true);
+    setIgnitePhase(1);
 
-  setIgniteMessage(message);
-  
-  setIgniteMoment(true);
-  setIgnitePhase(1);   // Ignite表示
+    setTimeout(() => setIgnitePhase(2), 2000);
 
-  setTimeout(() => {
-    setIgnitePhase(2); // メッセージ表示
-  }, 2000);
-
-  setTimeout(() => {
-    setIgniteMoment(false);
-    setIgnitePhase(0);
-    start();           // タイマー開始
-  }, 4000);
-};
+    setTimeout(() => {
+      setIgniteMoment(false);
+      setIgnitePhase(0);
+      start();
+    }, 4000);
+  };
 
   const handleEnd = () => {
     const result = stop();
 
-    setIgniteMessage(
-      IGNITE_MESSAGE_PAIRS[ignitePairIndex].end
-    );
+    setIgniteType("end");
 
-  if (!result) return;
+    if (!result) return;
 
-const { startTime, endTime, duration } = result;
-const achieved =
-  duration >= TARGET_HOURS * 60 * 60 * 1000;
+    const { startTime, endTime, duration } = result;
 
-const entry = {
-  id: startTime,
-  date: new Date(startTime).toISOString().split("T")[0],
-  startTime,
-  endTime,
-  duration,
-  targetHours: TARGET_HOURS,
-  maxFastHours: MAX_FAST_HOURS,
-  achieved,
-  autoStopped: false, 
-  autoReset: false,
-};
+    const achieved =
+      duration >= TARGET_HOURS * 60 * 60 * 1000;
 
-completeFast(entry);
+    completeFast({
+      id: startTime,
+      date: new Date(startTime).toISOString().split("T")[0],
+      startTime,
+      endTime,
+      duration,
+      targetHours: TARGET_HOURS,
+      maxFastHours: MAX_FAST_HOURS,
+      achieved,
+      autoStopped: false,
+      autoReset: false,
+    });
   };
 
-const handleReset = () => {
-  reset();
-  setIgniteMessage("");
-};
+
+const currentMessage =
+  ignitePairIndex !== null && igniteType
+    ? messageSet[ignitePairIndex]?.[igniteType]
+    : "";
+
+
+  const handleReset = () => {
+    reset();
+    setIgnitePairIndex(null);
+    setIgniteType(null);
+  };
+
 
   return (
     <div>
@@ -248,7 +303,7 @@ const handleReset = () => {
 
     {ignitePhase === 2 && (
       <div className="ignite-message">
-        {igniteMessage}
+        {currentMessage}
       </div>
     )}
   </div>
@@ -262,14 +317,14 @@ const handleReset = () => {
         <IgniteLogo variant="icon" size="small" />
       </div>
 
-   {igniteMessage && (
+   {currentMessage && (
      <div className="ignite-daily-message">
-       {igniteMessage}
+       {currentMessage}
      </div>
    )}
 
       <div className="timer-wrapper">
-        <svg className="progress-ring" width="350" height="350"
+        <svg className="progress-ring" width="300" height="300"
              viewBox="0 0 300 300">
           <defs>
             <linearGradient id="igniteGradient" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -289,18 +344,22 @@ const handleReset = () => {
 
           <circle
             stroke="url(#igniteGradient)"
-            strokeWidth="12"
             fill="transparent"
-            r="100"
-            cx="120"
-            cy="120"
-            strokeDasharray={2 * Math.PI * 100}
-            strokeDashoffset={2 * Math.PI * 100 * (1 - progress / 100)}
+            strokeWidth={STROKE}
+            r={RADIUS}
+            cx="150"
+            cy="150"
+            strokeDasharray={CIRCUMFERENCE}
+            strokeDashoffset={CIRCUMFERENCE * (1 - progress / 100)}
+            style={{
+              transform:"rotate(-90 150 150)"
+            }}
             className={`progress-ring-progress 
               ${status === "running" ? "running" : ""}
               ${status === "completed" ? "completed" : ""}
             `}
           />
+
         </svg>
 
         <div className={`timer-display

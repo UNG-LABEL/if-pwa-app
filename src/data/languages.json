@@ -80,5 +80,171 @@
       "note": "This is not extreme fasting. It can be naturally integrated into daily life.",
       "cta": "Learn More"
     }
+  },
+
+  "es": {
+  "hero": {
+    "headline": "16 Hours Awakens Your Focus",
+    "subheadline": "Never give up. Maximize performance with a new habit",
+    "cta": "Start Now"
+  },
+  "problem": {
+    "headline": "Are you experiencing this?",
+    "items": [
+      "Difficulty focusing",
+      "Constant fatigue",
+      "Mental fog"
+    ]
+  },
+  "benefits": {
+    "headline": "What You Gain with Intermittent Fasting",
+    "items": [
+      "Improved focus",
+      "Better recovery",
+      "Mental clarity"
+    ]
+  },
+  "trust": {
+    "headline": "A Habit Backed by Science",
+    "points": [
+      "Time structure linked to autophagy research",
+      "Practiced by high-performing professionals",
+      "Widely adopted as a global health habit"
+    ]
+  },
+  "cta": {
+    "headline": "Start Your New Habit Today",
+    "button": "Get Started"
+  },
+  "modal": {
+    "headline": "16 Hours Awakens Your Focus",
+    "description": "Intermittent fasting is a habit...",
+    "note": "This is not extreme fasting.",
+    "cta": "Learn More"
   }
+},
+"pt": {
+  "hero": {
+    "headline": "16 Hours Awakens Your Focus",
+    "subheadline": "Never give up. Maximize performance with a new habit",
+    "cta": "Start Now"
+  },
+  "problem": {
+    "headline": "Are you experiencing this?",
+    "items": [
+      "Difficulty focusing",
+      "Constant fatigue",
+      "Mental fog"
+    ]
+  },
+  "benefits": {
+    "headline": "What You Gain with Intermittent Fasting",
+    "items": [
+      "Improved focus",
+      "Better recovery",
+      "Mental clarity"
+    ]
+  },
+  "trust": {
+    "headline": "A Habit Backed by Science",
+    "points": [
+      "Time structure linked to autophagy research",
+      "Practiced by high-performing professionals",
+      "Widely adopted as a global health habit"
+    ]
+  },
+  "cta": {
+    "headline": "Start Your New Habit Today",
+    "button": "Get Started"
+  },
+  "modal": {
+    "headline": "16 Hours Awakens Your Focus",
+    "description": "Intermittent fasting is a habit...",
+    "note": "This is not extreme fasting.",
+    "cta": "Learn More"
+  }
+},
+"id": {
+  "hero": {
+    "headline": "16 Hours Awakens Your Focus",
+    "subheadline": "Never give up. Maximize performance with a new habit",
+    "cta": "Start Now"
+  },
+  "problem": {
+    "headline": "Are you experiencing this?",
+    "items": [
+      "Difficulty focusing",
+      "Constant fatigue",
+      "Mental fog"
+    ]
+  },
+  "benefits": {
+    "headline": "What You Gain with Intermittent Fasting",
+    "items": [
+      "Improved focus",
+      "Better recovery",
+      "Mental clarity"
+    ]
+  },
+  "trust": {
+    "headline": "A Habit Backed by Science",
+    "points": [
+      "Time structure linked to autophagy research",
+      "Practiced by high-performing professionals",
+      "Widely adopted as a global health habit"
+    ]
+  },
+  "cta": {
+    "headline": "Start Your New Habit Today",
+    "button": "Get Started"
+  },
+  "modal": {
+    "headline": "16 Hours Awakens Your Focus",
+    "description": "Intermittent fasting is a habit...",
+    "note": "This is not extreme fasting.",
+    "cta": "Learn More"
+  }
+},
+"fr": {
+  "hero": {
+    "headline": "16 Hours Awakens Your Focus",
+    "subheadline": "Never give up. Maximize performance with a new habit",
+    "cta": "Start Now"
+  },
+  "problem": {
+    "headline": "Are you experiencing this?",
+    "items": [
+      "Difficulty focusing",
+      "Constant fatigue",
+      "Mental fog"
+    ]
+  },
+  "benefits": {
+    "headline": "What You Gain with Intermittent Fasting",
+    "items": [
+      "Improved focus",
+      "Better recovery",
+      "Mental clarity"
+    ]
+  },
+  "trust": {
+    "headline": "A Habit Backed by Science",
+    "points": [
+      "Time structure linked to autophagy research",
+      "Practiced by high-performing professionals",
+      "Widely adopted as a global health habit"
+    ]
+  },
+  "cta": {
+    "headline": "Start Your New Habit Today",
+    "button": "Get Started"
+  },
+  "modal": {
+    "headline": "16 Hours Awakens Your Focus",
+    "description": "Intermittent fasting is a habit...",
+    "note": "This is not extreme fasting.",
+    "cta": "Learn More"
+  }
+}
+
 }
