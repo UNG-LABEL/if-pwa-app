@@ -314,18 +314,14 @@ transform:scale(1.05) translateY(0);
 .ignite-daily-message{
 
 font-size:18px;
-font-weight:600;
-
-text-align:center;
-
-margin-bottom:12px;
-
-letter-spacing:1px;
-
-color:#e8faff;
-
-text-shadow:
-0 0 6px rgba(0,191,255,0.4);
-
+background: rgba(15, 23, 42, 0.9);
+color: #e6f7ff;
+padding: 12px 18px;
+margin: 12px auto;
+border-radius: 12px;
+border: 1px solid rgba(92, 225, 255, 0.3);
+max-width: 500px;
+text-align: center;
+font-weight: 600;
 }
 
