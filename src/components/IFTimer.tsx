@@ -206,7 +206,7 @@ useEffect(() => {
   const remaining = Math.max(TARGET - elapsed, 0);
 
   const [visibleCount, setVisibleCount] = useState(20);
-
+  const [showHistory, setShowHistory] = useState(false);
 
 const formatTime = (ms: number) => {
   const h = Math.floor(ms / 3600000);
@@ -470,71 +470,98 @@ const currentMessage =
 
       <hr style={{ margin: "20px 0" }} />
 
-      <h4>{TEXT[lang].history}</h4>
+      <h4
+  onClick={() => setShowHistory(!showHistory)}
+  style={{
+    cursor: "pointer",
+    textAlign: "center",
+  }}
+>
+  {showHistory
+    ? `▼ ${TEXT[lang].history}`
+    : `▶ ${TEXT[lang].history}`}
+</h4>
 
-      {history.length === 0 && (
-        <p>{TEXT[lang].noHistory}</p>
-      )}
+<div className="brand-mark">
+  Ignite Within™
+</div>
 
-      {history
-  .slice()
-  .reverse()
-  .slice(0, visibleCount)
-  .map((entry) => (
-    <div
-      key={entry.id}
-      style={{
-        background: "#111",
-        color: "#fff",
-        padding: "14px 16px",
-        borderRadius: "12px",
-        marginBottom: "12px",
-        boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-      }}
-    >
-      {/* 1行目 */}
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <span>
-          {entry.date}{" "}
-          {new Date(entry.startTime).toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          })}
-          {" → "}
-          {new Date(entry.endTime).toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          })}
-        </span>
-      </div>
+{showHistory && (
+  <>
+    {history.length === 0 && (
+      <p>{TEXT[lang].noHistory}</p>
+    )}
 
-      {/* 2行目 */}
-      <div
-        style={{
-          marginTop: "6px",
-          fontWeight: "bold",
-          color:
-            entry.duration >= TARGET
-              ? "#ff6b00"
-              : "#ccc",
-        }}
+    {history
+      .slice()
+      .reverse()
+      .slice(0, visibleCount)
+      .map((entry) => (
+        <div
+          key={entry.id}
+          style={{
+            background: "#111",
+            color: "#fff",
+            padding: "14px 16px",
+            borderRadius: "12px",
+            marginBottom: "12px",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
+            <span>
+              {entry.date}{" "}
+              {new Date(entry.startTime).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+              {" → "}
+              {new Date(entry.endTime).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </span>
+          </div>
+
+          <div
+            style={{
+              marginTop: "6px",
+              fontWeight: "bold",
+              color:
+                entry.duration >= TARGET
+                  ? "#ff6b00"
+                  : "#ccc",
+            }}
+          >
+            {entry.duration >= TARGET && "🔥 "}
+            {formatTime(entry.duration)}
+          </div>
+        </div>
+      ))}
+
+    {visibleCount < history.length && (
+      <button
+        onClick={() =>
+          setVisibleCount((prev) => prev + 20)
+        }
       >
-        {entry.duration >= TARGET && "🔥 "}
-        {formatTime(entry.duration)}
-      </div>
-    </div>
-))}
-
-{visibleCount < history.length && (
-  <button
-    onClick={() => setVisibleCount((prev) => prev + 20)}
-  >
-    {TEXT[lang].loadMore}
-  </button>
-
-  
+        {TEXT[lang].loadMore}
+      </button>
+    )}
+  </>
 )}
 
-    </div>
+<div className="copyright">
+  © 2026 Ignite Within
+  <br />
+  All Rights Reserved.
+</div>
+
+</div>
   );
 };

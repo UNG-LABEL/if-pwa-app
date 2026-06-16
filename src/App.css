@@ -325,3 +325,47 @@ text-align: center;
 font-weight: 600;
 }
 
+.copyright {
+  margin-top: 40px;
+  margin-bottom: 20px;
+
+  text-align: center;
+
+  font-size: 12px;
+  line-height: 1.6;
+
+  color: rgba(92, 225, 255, 0.7);
+
+  text-shadow:
+    0 0 5px rgba(92, 225, 255, 0.2);
+
+  letter-spacing: 1px;
+}
+
+.brand-mark {
+  text-align: center;
+  margin: 12px 0 24px 0;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  color: rgba(92,225,255,0.85);
+
+  letter-spacing: 2px;
+
+  text-shadow:
+    0 0 8px rgba(92,225,255,0.25);
+}
+
+.copyright {
+  text-align: center;
+
+  margin-top: 30px;
+  margin-bottom: 20px;
+
+  font-size: 12px;
+
+  color: rgba(230,242,255,0.5);
+
+  line-height: 1.6;
+}
