@@ -47,19 +47,46 @@ button:hover {
   background: radial-gradient(circle, #112244 0%, #0a1222 70%);
   box-shadow: 0 0 20px rgba(0,150,255,0.3);
   transition: all 0.4s ease;
-  animation: ignitePulse 4s ease-in-out infinite;
   animation-fill-mode: both;
   pointer-events: none;
 }
 
-
-
-.timer-display.active {
-  box-shadow:
-    0 0 25px rgba(0,150,255,0.6),
-    0 0 20px rgba(0,180,255,0.3);
-  animation: ignitePulse 2.2s ease-in-out infinite;
+.timer-display.fast.running{
+  animation: ignitePulseFast 2.2s ease-in-out infinite;
 }
+
+.timer-display.feed.running{
+  animation: ignitePulseFeed 2.2s ease-in-out infinite;
+}
+
+
+.timer-display.fast.completed{
+  box-shadow:
+    0 0 80px #00bfff !important;
+}
+
+.timer-display.feed.completed{
+  box-shadow:
+    0 0 80px #7dffb3 !important;
+}
+
+.timer-display.fast.idle{
+  box-shadow:
+    0 0 20px rgba(0,150,255,0.25);
+
+  animation:
+    ignitePulseIdle 5s ease-in-out infinite;
+}
+
+.timer-display.feed.idle{
+  box-shadow:
+    0 0 20px rgba(125,255,179,0.25);
+
+  animation:
+    ignitePulseIdle 5s ease-in-out infinite;
+}
+
+
 
 .timer-wrapper {
   position: relative;
@@ -82,23 +109,62 @@ button:hover {
 .progress-ring-progress {
   transition: stroke-dashoffset 0.3s linear;
   filter: none;
-  animation: ignitePulse 4s ease-in-out infinite;
-  animation-fill-mode: both;
-  pointer-events: none;
+  
 }
 
 
 
 
-.progress-ring-progress.running {
-  animation: ignitePulse 2.2s ease-in-out infinite;
+.progress-ring-progress.fast.running {
+  animation: ignitePulseFast 2.2s ease-in-out infinite;
+}
+
+.progress-ring-progress.feed.running {
+  animation: ignitePulseFeed 2.2s ease-in-out infinite;
+}
+
+@keyframes ignitePulseFast {
+
+  0%{
+    filter: drop-shadow(0 0 8px #00bfff);
+  }
+
+  50%{
+    filter: drop-shadow(0 0 40px #5ce1ff);
+  }
+
+  100%{
+    filter: drop-shadow(0 0 8px #00bfff);
+  }
+
+}
+
+@keyframes ignitePulseFeed {
+
+  0%{
+    filter: drop-shadow(0 0 8px #7dffb3);
+  }
+
+  50%{
+    filter: drop-shadow(0 0 40px #7dffb3);
+  }
+
+  100%{
+    filter: drop-shadow(0 0 8px #7dffb3);
+  }
+
 }
 
 .progress-ring-progress.completed {
-  stroke: #e0f7ff;
-  filter: drop-shadow(0 0 20px #ffffff);
-  animation: none;
-  transition: all 0.8s ease;
+  animation:none;
+}
+
+.progress-ring-progress.fast.completed{
+  filter: drop-shadow(0 0 20px #5ce1ff);
+}
+
+.progress-ring-progress.feed.completed{
+  filter: drop-shadow(0 0 20px #7dffb3);
 }
 
 
@@ -121,9 +187,10 @@ button:hover {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px 16px;
-  font-size: 15px; 
+  font-size: 15px;
   margin-top: 8px;
   font-weight: 500;
+  padding: 0 12px;
 }
 
 @media (max-width: 480px) {
@@ -182,6 +249,7 @@ button:hover {
 .stat-item {
   display: flex;
   flex-direction: column;
+  padding-left: 10px;
 }
 
 .stat-label {
@@ -325,22 +393,6 @@ text-align: center;
 font-weight: 600;
 }
 
-.copyright {
-  margin-top: 40px;
-  margin-bottom: 20px;
-
-  text-align: center;
-
-  font-size: 12px;
-  line-height: 1.6;
-
-  color: rgba(92, 225, 255, 0.7);
-
-  text-shadow:
-    0 0 5px rgba(92, 225, 255, 0.2);
-
-  letter-spacing: 1px;
-}
 
 .brand-mark {
   text-align: center;
@@ -359,13 +411,31 @@ font-weight: 600;
 
 .copyright {
   text-align: center;
-
   margin-top: 30px;
   margin-bottom: 20px;
-
   font-size: 12px;
-
   color: rgba(230,242,255,0.5);
-
   line-height: 1.6;
+  letter-spacing: 1px;
+}
+
+
+.progress-ring-progress.fast {
+  filter: drop-shadow(0 0 20px #5ce1ff);
+}
+
+.progress-ring-progress.feed {
+  filter: drop-shadow(0 0 20px #7dffb3);
+}
+
+@keyframes ignitePulseIdle {
+  0%{
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50%{
+    transform: translate(-50%, -50%) scale(1.06);
+  }
+  100%{
+    transform: translate(-50%, -50%) scale(1);
+  }
 }

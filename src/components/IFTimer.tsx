@@ -158,6 +158,11 @@ export const IFTimer = ({ lang }: { lang: Lang }) => {
   const [autoStopTriggered, setAutoStopTriggered] = useState(false);
   const [igniteMoment, setIgniteMoment] = useState(false);
   const [ignitePhase, setIgnitePhase] = useState(0);
+ type Mode = "fast" | "feed";
+
+
+ const [mode, setMode] =
+  useState<Mode>("fast");
 
   const progress = Math.min(
   (elapsed / (MAX_FAST_HOURS * 60 * 60 * 1000)) * 100,
@@ -264,6 +269,50 @@ const formatTime = (ms: number) => {
     });
   };
 
+const handleLap = () => {
+  const result = stop();
+
+  if (!result) return;
+
+  const {
+    startTime,
+    endTime,
+    duration,
+  } = result;
+
+  const achieved =
+    mode === "fast" &&
+    duration >= TARGET_HOURS * 60 * 60 * 1000;
+
+  completeFast({
+    id: startTime,
+    date: new Date(startTime)
+      .toISOString()
+      .split("T")[0],
+    startTime,
+    endTime,
+    duration,
+    targetHours: TARGET_HOURS,
+    maxFastHours: MAX_FAST_HOURS,
+    achieved,
+    autoStopped: false,
+    autoReset: false,
+
+    // 後で履歴表示に使う
+    mode,
+  });
+
+  // FAST⇔FEED切替
+  const nextMode =
+    mode === "fast"
+      ? "feed"
+      : "fast";
+
+  setMode(nextMode);
+
+  // 即再スタート
+  start();
+};
 
 const currentMessage =
   ignitePairIndex !== null && igniteType
@@ -331,6 +380,12 @@ const currentMessage =
               <stop offset="0%" stopColor="#00bfff" />
               <stop offset="100%" stopColor="#5ce1ff" />
             </linearGradient>
+
+            <linearGradient id="feedGradient">
+              <stop offset="0%"  stopColor="#5ce1ff"  />
+              <stop offset="100%" stopColor="#7dffb3"/>
+            </linearGradient>
+
           </defs>
 
           <circle
@@ -343,7 +398,11 @@ const currentMessage =
           />
 
           <circle
-            stroke="url(#igniteGradient)"
+            stroke={
+             mode === "feed"
+             ? "url(#feedGradient)"
+             : "url(#igniteGradient)"
+            }
             fill="transparent"
             strokeWidth={STROKE}
             r={RADIUS}
@@ -354,39 +413,55 @@ const currentMessage =
             style={{
               transform:"rotate(-90 150 150)"
             }}
-            className={`progress-ring-progress 
+            className={`progress-ring-progress
               ${status === "running" ? "running" : ""}
               ${status === "completed" ? "completed" : ""}
+              ${mode === "feed" ? "feed" : "fast"}
             `}
           />
 
         </svg>
 
-        <div className={`timer-display
-               ${status === "running" ? "running" : ""}
-               ${status === "completed" ? "completed" : ""}
-             `}
-           >
+
+
+        <div
+  className={`timer-display
+    ${status}
+    ${mode === "feed" ? "feed" : "fast"}
+  `}
+>
           {formatTime(elapsed)}
        </div>
      </div>
 
-      <h3>
-      {TEXT[lang].streak}: {streak}
+      <h3 style={{ paddingLeft: "12px" }}>
+        {TEXT[lang].streak}: {streak}
       {lang === "ja" ? TEXT[lang].days : ` ${TEXT[lang].days}`}
       </h3>
 
       {/* 平均表示 */}
       {averageDuration > 0 && ( 
-        <h4>
-      {TEXT[lang].average}: {formatTime(averageDuration)}
-      </h4>
+        <h4 style={{ paddingLeft: "12px" }}>
+          {TEXT[lang].average}: {formatTime(averageDuration)}
+        </h4>
       )}
 
       {/* FAST中UI */}
       {status === "running" && (
         <>
-          <h2>{TEXT[lang].fastMode}</h2>
+          <h2
+            style={{
+            paddingLeft: "12px",
+            color:
+              mode === "fast"
+                ? "#8bd3ff"
+                : "#8bffb3",
+            }}
+          >
+           {mode === "fast"
+             ? "🔥 IGNITE MODE"
+             : "🌱 REBUILD MODE"}
+          </h2>
 
           <div className="stats-container">
             <div className="stat-item">
@@ -449,11 +524,39 @@ const currentMessage =
 
       {/* ボタン制御 */}
 {status === "idle" && (
-  <button onClick={handleStart}>START FAST</button>
+  <div className="button-group">
+    <button
+      onClick={() => {
+        setMode("fast");
+        handleStart();
+      }}
+    >
+      START FAST
+    </button>
+
+    <button
+      onClick={() => {
+        setMode("feed");
+        handleStart();
+      }}
+    >
+      START FEED
+    </button>
+  </div>
 )}
 
 {status === "running" && (
-  <button onClick={handleEnd}>END FAST</button>
+  <div className="button-group">
+
+    <button onClick={handleLap}>
+      LAP
+    </button>
+
+    <button onClick={handleEnd}>
+      STOP
+    </button>
+
+  </div>
 )}
 
 
@@ -505,9 +608,46 @@ const currentMessage =
             padding: "14px 16px",
             borderRadius: "12px",
             marginBottom: "12px",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+          
+            borderLeft:
+              entry.mode === "feed"
+                ? "4px solid #7dffb3"
+                : "4px solid #5ce1ff",
+          
+            boxShadow:
+              entry.mode === "feed"
+                ? "0 0 12px rgba(125,255,179,0.15)"
+                : "0 0 12px rgba(92,225,255,0.15)",
           }}
         >
+          <div
+            style={{
+              color:
+                entry.mode === "fast"
+                  ? "#8bd3ff"
+                  : "#8bffb3",
+              fontWeight:"bold",
+              marginBottom:"6px"
+            }}
+          >
+            {entry.mode === "fast"
+              ? "🔥 FAST"
+              : "🌱 FEED"}
+          </div>
+
+
+          <div
+           style={{
+             fontSize: "12px",
+             opacity: 0.8,
+             marginBottom: "4px",
+           }}
+          >
+            {entry.mode === "feed"
+              ? "🌱 REBUILD MODE"
+              : "🔥 IGNITE MODE"}
+          </div>
+
           <div
             style={{
               display: "flex",
@@ -533,12 +673,16 @@ const currentMessage =
               marginTop: "6px",
               fontWeight: "bold",
               color:
-                entry.duration >= TARGET
-                  ? "#ff6b00"
-                  : "#ccc",
+                entry.mode === "feed"
+                  ? "#7dffb3"
+                  : "#5ce1ff",
+                  
             }}
           >
-            {entry.duration >= TARGET && "🔥 "}
+            {entry.mode === "feed"
+              ? "🌱 FEED "
+              : "🔥 FAST "}
+          
             {formatTime(entry.duration)}
           </div>
         </div>

@@ -1,14 +1,17 @@
 export type FastHistory = {
   id: number;
-  date: string; 
+  date: string;
   startTime: number;
   endTime: number;
   duration: number;
-  targetHours: number;     // 例: 16
-  maxFastHours: number;    // 例: 24
+
+  targetHours: number;
+  maxFastHours: number;
 
   autoStopped: boolean;
   autoReset: boolean;
 
-  achieved: boolean;       // targetHours達成したか
-};
+  achieved: boolean;
+
+  mode?: "fast" | "feed";
+}
