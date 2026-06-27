@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import IgniteLogo from "../components/IgniteLogo";
 import { messages } from "../data/messages";
 
-const TARGET_HOURS = 16;
 
 type Lang = "ja" | "en" | "es" | "pt" | "id" | "fr"; // 🔥 拡張
 
@@ -19,7 +18,10 @@ const TEXT = {
     elapsed: "経過",
     started: "開始",
     ends: "終了予定",
-    achieved: "🎉 16時間達成！",
+    igniteComplete: "🔥 IGNITE COMPLETE",
+    igniteSub: "Well done.\nTime to rebuild.",
+    readyToIgnite: "🔥 READY TO IGNITE",
+    readySub: "Recovery complete.\nStart when you're ready.",
     thisFast: "今回の断食時間",
     startFast: "START FAST",
     endFast: "END FAST",
@@ -39,7 +41,10 @@ const TEXT = {
     elapsed: "Elapsed",
     started: "Started",
     ends: "Ends",
-    achieved: "🎉 16 Hours Achieved!",
+    igniteComplete: "🔥 IGNITE COMPLETE",
+    igniteSub: "Well done.\nTime to rebuild.",
+    readyToIgnite: "🔥 READY TO IGNITE",
+    readySub: "Recovery complete.\nStart when you're ready.",
     thisFast: "This Fast",
     startFast: "START FAST",
     endFast: "END FAST",
@@ -59,7 +64,10 @@ const TEXT = {
     elapsed: "Transcurrido",
     started: "Inicio",
     ends: "Fin",
-    achieved: "🎉 ¡16 horas logrado!",
+    igniteComplete: "🔥 IGNITE COMPLETE",
+    igniteSub: "Well done.\nTime to rebuild.",
+    readyToIgnite: "🔥 READY TO IGNITE",
+    readySub: "Recovery complete.\nStart when you're ready.",
     thisFast: "Este ayuno",
     startFast: "INICIAR",
     endFast: "FINALIZAR",
@@ -79,7 +87,10 @@ const TEXT = {
     elapsed: "Decorrido",
     started: "Início",
     ends: "Fim",
-    achieved: "🎉 16h atingidas!",
+    igniteComplete: "🔥 IGNITE COMPLETE",
+    igniteSub: "Well done.\nTime to rebuild.",
+    readyToIgnite: "🔥 READY TO IGNITE",
+    readySub: "Recovery complete.\nStart when you're ready.",
     thisFast: "Este jejum",
     startFast: "INICIAR",
     endFast: "ENCERRAR",
@@ -99,7 +110,10 @@ const TEXT = {
     elapsed: "Berjalan",
     started: "Mulai",
     ends: "Selesai",
-    achieved: "🎉 16 jam tercapai!",
+    igniteComplete: "🔥 IGNITE COMPLETE",
+    igniteSub: "Well done.\nTime to rebuild.",
+    readyToIgnite: "🔥 READY TO IGNITE",
+    readySub: "Recovery complete.\nStart when you're ready.",
     thisFast: "Puasa ini",
     startFast: "MULAI",
     endFast: "SELESAI",
@@ -119,7 +133,10 @@ const TEXT = {
     elapsed: "Écoulé",
     started: "Début",
     ends: "Fin",
-    achieved: "🎉 16h atteintes!",
+    igniteComplete: "🔥 IGNITE COMPLETE",
+    igniteSub: "Well done.\nTime to rebuild.",
+    readyToIgnite: "🔥 READY TO IGNITE",
+    readySub: "Recovery complete.\nStart when you're ready.",
     thisFast: "Ce jeûne",
     startFast: "COMMENCER",
     endFast: "TERMINER",
@@ -164,8 +181,24 @@ export const IFTimer = ({ lang }: { lang: Lang }) => {
  const [mode, setMode] =
   useState<Mode>("fast");
 
+  const TIMER_PRESETS = {
+  fast: 16,
+  feed: 8,
+};
+
+const TARGET =
+  TIMER_PRESETS[mode] *
+  60 *
+  60 *
+  1000;
+
+const remaining = Math.max(
+  TARGET - elapsed,
+  0
+);
+
   const progress = Math.min(
-  (elapsed / (MAX_FAST_HOURS * 60 * 60 * 1000)) * 100,
+  (elapsed / TARGET) * 100,
   100
 );
   const RADIUS = 130;
@@ -187,7 +220,7 @@ useEffect(() => {
     const { startTime, endTime, duration } = result;
 
     const achieved =
-      duration >= TARGET_HOURS * 60 * 60 * 1000;
+  duration >= TIMER_PRESETS[mode] * 60 * 60 * 1000;
 
     completeFast({
       id: startTime,
@@ -195,20 +228,18 @@ useEffect(() => {
       startTime,
       endTime,
       duration,
-      targetHours: TARGET_HOURS,
+      targetHours: TIMER_PRESETS[mode],
       maxFastHours: MAX_FAST_HOURS,
       achieved,
       autoStopped: true,
       autoReset: false,
+      mode,
     });
   }
 }, [elapsed, status, autoStopTriggered]);
 
 
 
-
-  const TARGET = 16 * 60 * 60 * 1000;
-  const remaining = Math.max(TARGET - elapsed, 0);
 
   const [visibleCount, setVisibleCount] = useState(20);
   const [showHistory, setShowHistory] = useState(false);
@@ -253,7 +284,7 @@ const formatTime = (ms: number) => {
     const { startTime, endTime, duration } = result;
 
     const achieved =
-      duration >= TARGET_HOURS * 60 * 60 * 1000;
+  duration >= TIMER_PRESETS[mode] * 60 * 60 * 1000;
 
     completeFast({
       id: startTime,
@@ -261,11 +292,12 @@ const formatTime = (ms: number) => {
       startTime,
       endTime,
       duration,
-      targetHours: TARGET_HOURS,
+      targetHours: TIMER_PRESETS[mode],
       maxFastHours: MAX_FAST_HOURS,
       achieved,
       autoStopped: false,
       autoReset: false,
+      mode, 
     });
   };
 
@@ -282,7 +314,7 @@ const handleLap = () => {
 
   const achieved =
     mode === "fast" &&
-    duration >= TARGET_HOURS * 60 * 60 * 1000;
+    duration >= TIMER_PRESETS[mode] * 60 * 60 * 1000;
 
   completeFast({
     id: startTime,
@@ -292,7 +324,7 @@ const handleLap = () => {
     startTime,
     endTime,
     duration,
-    targetHours: TARGET_HOURS,
+    targetHours:  TIMER_PRESETS[mode],
     maxFastHours: MAX_FAST_HOURS,
     achieved,
     autoStopped: false,
@@ -462,11 +494,26 @@ const currentMessage =
              ? "🔥 IGNITE MODE"
              : "🌱 REBUILD MODE"}
           </h2>
+<div
+  style={{
+    fontSize: "0.9rem",
+    opacity: 0.7,
+    marginTop: "-6px",
+    marginBottom: "12px",
+    paddingLeft: "12px",
+  }}
+>
+  {mode === "fast"
+    ? "Fasting Window"
+    : "Recovery Window"}
+</div>
 
           <div className="stats-container">
             <div className="stat-item">
               <span className="stat-label">
-                {TEXT[lang].remaining}
+                {mode === "fast"
+                ? TEXT[lang].remaining
+                : "Next Ignite In"}
               </span>
               <span className="stat-value">
                 {formatTime(remaining)}
@@ -513,10 +560,32 @@ const currentMessage =
           </div>
 
           {elapsed >= TARGET && (
-            <h3 style={{ color: "green" }}>
-              {TEXT[lang].achieved}
-            </h3>
-          )}
+  <div
+    style={{
+      textAlign: "center",
+      marginTop: "18px",
+    }}
+  >
+    <h3>
+      {mode === "fast"
+        ? TEXT[lang].igniteComplete
+        : TEXT[lang].readyToIgnite}
+    </h3>
+
+    <p
+      style={{
+        opacity: 0.75,
+        fontSize: "0.95rem",
+        whiteSpace: "pre-line",
+        marginTop: "-6px",
+      }}
+    >
+      {mode === "fast"
+        ? TEXT[lang].igniteSub
+        : TEXT[lang].readySub}
+    </p>
+  </div>
+)}
         </>
       )}
 
@@ -630,22 +699,25 @@ const currentMessage =
               marginBottom:"6px"
             }}
           >
+
             {entry.mode === "fast"
-              ? "🔥 FAST"
-              : "🌱 FEED"}
+              ? "🔥 IGNITE MODE"
+              : "🌱 REBUILD MODE"}
           </div>
 
 
           <div
            style={{
              fontSize: "12px",
-             opacity: 0.8,
+             opacity: 0.65,
+             fontStyle: "italic",
              marginBottom: "4px",
+             paddingLeft: "30px",
            }}
           >
             {entry.mode === "feed"
-              ? "🌱 REBUILD MODE"
-              : "🔥 IGNITE MODE"}
+              ? "Recovery Window"
+              : "Fasting Window"}
           </div>
 
           <div
@@ -680,8 +752,8 @@ const currentMessage =
             }}
           >
             {entry.mode === "feed"
-              ? "🌱 FEED "
-              : "🔥 FAST "}
+              ? " FEED "
+              : " FAST "}
           
             {formatTime(entry.duration)}
           </div>
