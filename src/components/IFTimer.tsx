@@ -500,7 +500,7 @@ const currentMessage =
     opacity: 0.7,
     marginTop: "-6px",
     marginBottom: "12px",
-    paddingLeft: "12px",
+    paddingLeft: "22px",
   }}
 >
   {mode === "fast"
@@ -752,8 +752,8 @@ const currentMessage =
             }}
           >
             {entry.mode === "feed"
-              ? " FEED "
-              : " FAST "}
+              ? "FEED "
+              : "FAST "}
           
             {formatTime(entry.duration)}
           </div>
