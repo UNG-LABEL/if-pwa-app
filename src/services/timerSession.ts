@@ -2,6 +2,10 @@ export type TimerMode = "fast" | "feed";
 
 export interface TimerSession {
   mode: TimerMode;
+
+  startedAt: number | null;
+
+  running: boolean;
 }
 
 const STORAGE_KEY = "ignite-session";
