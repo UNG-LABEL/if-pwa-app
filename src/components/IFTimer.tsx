@@ -3,6 +3,7 @@ import { useIFStats } from "../hooks/useIFStats";
 import { useState, useEffect } from "react";
 import IgniteLogo from "../components/IgniteLogo";
 import { messages } from "../data/messages";
+import { timerSession } from "../services/timerSession";
 
 
 type Lang = "ja" | "en" | "es" | "pt" | "id" | "fr"; // 🔥 拡張
@@ -181,6 +182,23 @@ export const IFTimer = ({ lang }: { lang: Lang }) => {
  const [mode, setMode] =
   useState<Mode>("fast");
 
+  useEffect(() => {
+  const session = timerSession.load();
+
+  if (session) {
+    setMode(session.mode);
+  }
+}, []);
+
+useEffect(() => {
+  timerSession.save({
+  mode,
+  startedAt: startTime,
+  running: status === "running",
+});
+}, [mode, startTime, status]);
+
+
   const TIMER_PRESETS = {
   fast: 16,
   feed: 8,
@@ -354,6 +372,9 @@ const currentMessage =
 
   const handleReset = () => {
     reset();
+    
+    timerSession.clear();
+
     setIgnitePairIndex(null);
     setIgniteType(null);
   };
