@@ -195,7 +195,7 @@ useEffect(() => {
   mode,
   running: status === "running",
 });
-}, [mode, startTime, status]);
+}, [mode, status]);
 
 
   const TIMER_PRESETS = {
@@ -316,6 +316,7 @@ const formatTime = (ms: number) => {
       autoReset: false,
       mode, 
     });
+    timerSession.clear();
   };
 
 const handleLap = () => {
