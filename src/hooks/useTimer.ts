@@ -42,6 +42,7 @@ export const useTimer = () => {
     setElapsed(0);
     setStatus("running");
     localStorage.setItem(STORAGE_KEY, now.toString());
+    return now;
   };
 
   const stop = () => {

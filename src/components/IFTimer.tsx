@@ -193,7 +193,6 @@ export const IFTimer = ({ lang }: { lang: Lang }) => {
 useEffect(() => {
   timerSession.save({
   mode,
-  startedAt: startTime,
   running: status === "running",
 });
 }, [mode, startTime, status]);
