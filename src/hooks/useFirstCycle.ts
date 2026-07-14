@@ -14,6 +14,29 @@ const DEFAULT_STATE: FirstCycleState = {
   completed: false,
 };
 
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+const getCurrentDay = (
+  startedAt: number | null
+): number => {
+  if (!startedAt) return 0;
+
+  const start = new Date(startedAt);
+  const today = new Date();
+
+  // 時刻を無視して日付だけ比較
+  start.setHours(0, 0, 0, 0);
+  today.setHours(0, 0, 0, 0);
+
+  const diff =
+    Math.floor(
+      (today.getTime() - start.getTime()) / DAY_MS
+    ) + 1;
+
+  return Math.min(diff, 7);
+};
+
+
 export const useFirstCycle = () => {
   const [cycle, setCycle] =
     useState<FirstCycleState>(DEFAULT_STATE);
@@ -25,7 +48,15 @@ export const useFirstCycle = () => {
     if (!saved) return;
 
     try {
-      setCycle(JSON.parse(saved));
+    
+      const parsed = JSON.parse(saved) as FirstCycleState;
+
+     parsed.currentDay = getCurrentDay(
+     parsed.startedAt
+     );
+
+ setCycle(parsed);
+
     } catch {
       setCycle(DEFAULT_STATE);
     }
@@ -47,8 +78,10 @@ export const useFirstCycle = () => {
   };
 
   return {
-    cycle,
-    save,
-    reset,
-  };
+  cycle,
+  save,
+  reset,
+  getCurrentDay: () =>
+    getCurrentDay(cycle.startedAt),
+};
 };
