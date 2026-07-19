@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import IgniteLogo from "../components/IgniteLogo";
 import { messages } from "../data/messages";
 import { timerSession } from "../services/timerSession";
+import { useFirstCycle } from "../hooks/useFirstCycle";
 
 
 type Lang = "ja" | "en" | "es" | "pt" | "id" | "fr"; // 🔥 拡張
@@ -172,7 +173,9 @@ export const IFTimer = ({ lang }: { lang: Lang }) => {
 
   const { start, stop, reset, elapsed, status, startTime } = useTimer();
   const { streak, history, averageDuration, completeFast } = useIFStats();
-
+  
+  const { getCurrentDay } = useFirstCycle();
+  const currentDay = getCurrentDay();
   const [autoStopTriggered, setAutoStopTriggered] = useState(false);
   const [igniteMoment, setIgniteMoment] = useState(false);
   const [ignitePhase, setIgnitePhase] = useState(0);
@@ -192,10 +195,11 @@ export const IFTimer = ({ lang }: { lang: Lang }) => {
 
 useEffect(() => {
   timerSession.save({
-  mode,
-  running: status === "running",
-});
-}, [mode, status]);
+    mode,
+    startedAt: startTime,
+    running: status === "running",
+  });
+}, [mode, startTime, status]);
 
 
   const TIMER_PRESETS = {
@@ -364,6 +368,8 @@ const handleLap = () => {
   start();
 };
 
+
+
 const currentMessage =
   ignitePairIndex !== null && igniteType
     ? messageSet[ignitePairIndex]?.[igniteType]
@@ -424,6 +430,21 @@ const currentMessage =
        {currentMessage}
      </div>
    )}
+
+{currentDay > 0 && (
+  <div
+    style={{
+      textAlign: "center",
+      color: "#9CA3AF",
+      fontSize: "0.9rem",
+      marginTop: "8px",
+      marginBottom: "18px",
+      letterSpacing: "0.05em",
+    }}
+  >
+    First Cycle • Day {currentDay}
+  </div>
+)}
 
       <div className="timer-wrapper">
         <svg className="progress-ring" width="300" height="300"

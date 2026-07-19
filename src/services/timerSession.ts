@@ -3,6 +3,10 @@ export type TimerMode = "fast" | "feed";
 export interface TimerSession {
   mode: TimerMode;
 
+  // 現在動いているタイマーの開始時刻
+  startedAt: number | null;
+
+  // タイマーが動作中か
   running: boolean;
 }
 
