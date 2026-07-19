@@ -174,7 +174,7 @@ export const IFTimer = ({ lang }: { lang: Lang }) => {
   const { start, stop, reset, elapsed, status, startTime } = useTimer();
   const { streak, history, averageDuration, completeFast } = useIFStats();
   
-  const { getCurrentDay } = useFirstCycle();
+  const { cycle, save, getCurrentDay } = useFirstCycle();
   const currentDay = getCurrentDay();
   const [autoStopTriggered, setAutoStopTriggered] = useState(false);
   const [igniteMoment, setIgniteMoment] = useState(false);
@@ -277,6 +277,13 @@ const formatTime = (ms: number) => {
 
   const handleStart = () => {
     setAutoStopTriggered(false);
+if (!cycle.startedAt) {
+  save({
+    startedAt: Date.now(),
+    currentDay: 1,
+    completed: false,
+  });
+}
 
     const index = getTodayPairIndex(messageSet.length || 1);
     setIgnitePairIndex(index);

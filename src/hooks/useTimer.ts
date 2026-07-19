@@ -9,15 +9,16 @@ export const useTimer = () => {
   const [elapsed, setElapsed] = useState<number>(0);
   const [status, setStatus] = useState<TimerStatus>("idle");
 
-  // 🔥 初期ロード時にlocalStorageから復元
-  useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      const savedStart = Number(saved);
-      setStartTime(savedStart);
-      setStatus("running");
-    }
-  }, []);
+  // 🔥 初期ロード時にTimerSessionから復元
+useEffect(() => {
+ const saved = localStorage.getItem(STORAGE_KEY);
+
+if (saved) {
+  const savedStart = Number(saved);
+  setStartTime(savedStart);
+  setStatus("running");
+}
+}, []);
 
   // 🔥 タイマー更新（純粋な時間計測のみ）
   useEffect(() => {
@@ -66,7 +67,7 @@ export const useTimer = () => {
     setStartTime(null);
     setElapsed(0);
     setStatus("idle");
-    localStorage.removeItem(STORAGE_KEY);
+   localStorage.removeItem(STORAGE_KEY);
   };
 
   return {

@@ -33,7 +33,7 @@ const getCurrentDay = (
       (today.getTime() - start.getTime()) / DAY_MS
     ) + 1;
 
-  return Math.min(diff, 7);
+  return Math.max(1, Math.min(diff, 7));
 };
 
 
