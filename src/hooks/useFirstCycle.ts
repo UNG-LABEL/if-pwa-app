@@ -52,10 +52,13 @@ export const useFirstCycle = () => {
       const parsed = JSON.parse(saved) as FirstCycleState;
 
      parsed.currentDay = getCurrentDay(
-     parsed.startedAt
-     );
+  parsed.startedAt
+);
 
- setCycle(parsed);
+parsed.completed =
+  parsed.currentDay >= 7;
+
+setCycle(parsed);
 
     } catch {
       setCycle(DEFAULT_STATE);
@@ -64,12 +67,23 @@ export const useFirstCycle = () => {
 
   // 保存
   const save = (state: FirstCycleState) => {
-    setCycle(state);
-    localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify(state)
-    );
+
+  const currentDay =
+    getCurrentDay(state.startedAt);
+
+  const updatedState = {
+    ...state,
+    currentDay,
+    completed: currentDay >= 7,
   };
+
+  setCycle(updatedState);
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(updatedState)
+  );
+};
 
   // リセット
   const reset = () => {
