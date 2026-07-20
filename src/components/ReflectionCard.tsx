@@ -1,15 +1,21 @@
 import { useState } from "react";
+import { useReflection } from "../hooks/useReflection";
+
 
 type ReflectionCardProps = {
   visible: boolean;
 };
 
-const [reflection, setReflection] = useState("");
+
 
 export default function ReflectionCard({
   visible,
 }: ReflectionCardProps) {
+const [reflection, setReflection] = useState("");
+const { save } = useReflection();
   if (!visible) return null;
+
+
 
   return (
     <div className="reflection-card">
@@ -34,6 +40,7 @@ export default function ReflectionCard({
 <button
   className="reflection-save-button"
   disabled={!reflection.trim()}
+  onClick={() => save(reflection)}
 >
   Complete Reflection
 </button>

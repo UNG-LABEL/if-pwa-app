@@ -1,0 +1,15 @@
+.my-promise-card {
+  margin-top: 24px;
+  padding: 20px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(92,225,255,0.25);
+}
+
+.my-promise-card h2 {
+  margin-bottom: 12px;
+}
+
+.my-promise-card p {
+  line-height: 1.7;
+}
