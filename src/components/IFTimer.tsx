@@ -5,6 +5,7 @@ import IgniteLogo from "../components/IgniteLogo";
 import { messages } from "../data/messages";
 import { timerSession } from "../services/timerSession";
 import { useFirstCycle } from "../hooks/useFirstCycle";
+import ReflectionCard from "./ReflectionCard";
 
 
 type Lang = "ja" | "en" | "es" | "pt" | "id" | "fr"; // 🔥 拡張
@@ -449,7 +450,15 @@ const currentMessage =
       letterSpacing: "0.05em",
     }}
   >
-    First Cycle • Day {currentDay}
+    <div className="first-cycle">
+      First Cycle • Day {currentDay}
+    </div>
+
+    {cycle.completed && (
+      <div className="first-cycle-complete">
+        🔥 First Cycle Complete
+      </div>
+    )}
   </div>
 )}
 
@@ -690,6 +699,11 @@ const currentMessage =
 )}
 
       <hr style={{ margin: "20px 0" }} />
+
+
+{cycle.completed && (
+  <ReflectionCard visible={true} />
+)}
 
       <h4
   onClick={() => setShowHistory(!showHistory)}
