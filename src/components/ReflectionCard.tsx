@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useReflection } from "../hooks/useReflection";
+import MyPromiseCard from "./MyPromiseCard";
 
 
 type ReflectionCardProps = {
@@ -13,6 +14,8 @@ export default function ReflectionCard({
 }: ReflectionCardProps) {
 const [reflection, setReflection] = useState("");
 const { save } = useReflection();
+const [completed, setCompleted] = useState(false);
+
   if (!visible) return null;
 
 
@@ -40,10 +43,18 @@ const { save } = useReflection();
 <button
   className="reflection-save-button"
   disabled={!reflection.trim()}
-  onClick={() => save(reflection)}
+  onClick={() => {
+  save(reflection);
+  setCompleted(true);
+  }}
+  
 >
   Complete Reflection
 </button>
+
+{completed && (
+  <MyPromiseCard visible />
+)}
 
     </div>
   );

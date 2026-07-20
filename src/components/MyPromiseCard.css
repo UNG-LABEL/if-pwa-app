@@ -13,3 +13,33 @@
 .my-promise-card p {
   line-height: 1.7;
 }
+
+.my-promise-textarea {
+  width: 100%;
+  min-height: 110px;
+  margin-top: 16px;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #334155;
+  background: #0f172a;
+  color: white;
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+.my-promise-button {
+  margin-top: 16px;
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: #7dffb3;
+  color: #0f172a;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.my-promise-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
